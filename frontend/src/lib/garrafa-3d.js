@@ -50,7 +50,9 @@ const EIXO_Y = new THREE.Vector3(0, 1, 0);
 // vitrine
 const ALTURA_PET = 0.187;    // altura da PET (m): o quadro do vidro é o da PET em escala, para as duas parecerem do mesmo tamanho
 const VAO = 0.035;           // entre os corpos, no modo 'ambas'
-const FRENTE = 0.08;         // no modo 'ambas', a garrafa pega vem para a frente: gira solta sem esbarrar na vizinha
+const FRENTE = 0.08;
+const V_AMBAS = 0.45;        // nas duas: cada uma virada para o seu lado (PET à esquerda, vidro à direita), em V
+const ZOOM = 0.04;           // nas duas: mouse perto ou toque traz a garrafa um pouco para a frente (a câmera não recua)         // no modo 'ambas', a garrafa pega vem para a frente: gira solta sem esbarrar na vizinha
 const TROCA = 0.9;           // s da troca de modo
 const ATRASO_VIDRO = 0.35;   // s: nas duas juntas, o vidro começa a encher depois da PET
 // sobra de cada lado no quadro da PET, na tela mais estreita antes de a câmera recuar (0,62)
@@ -267,7 +269,7 @@ export function iniciarVitrine(canvas, opcoes = {}) {
       // movimento livre: orientação e velocidade angular (rad/s, no mundo), altura no ar e avanço para a frente
       st: {
         q: new THREE.Quaternion(), w: new THREE.Vector3(),
-        alt: 0, altVel: 0, frente: 0, frenteVel: 0, noAr: false, pousando: false, fase: 0,
+        alt: 0, altVel: 0, frente: 0, frenteVel: 0, zoom: 0, pertoAte: 0, noAr: false, pousando: false, fase: 0,
         arrastando: false, pendente: null, ultimoX: 0, ultimoY: 0, ultimoMov: 0,
         ultimaInteracao: -1e9, interativa: false, avisou: false,
       },
@@ -520,10 +522,12 @@ export function iniciarVitrine(canvas, opcoes = {}) {
     g.raiz.visible = g.sombra.visible = sim;
     if (!sim) { g.jato.visible = false; repousar(g); }
   }
+  const poseDe = (g) => (modo === 'ambas' ? (g.id === 'pet' ? -V_AMBAS : V_AMBAS) : g.tipo.pose);
+  let perto = null;   // garrafa sob o mouse, nas duas
   function repousar(g) {   // em pé na pose de vitrine, parada no piso; o suco recomeça sem herdar o salto de posição
     const st = g.st;
-    st.q.setFromAxisAngle(EIXO_Y, g.tipo.pose); st.w.set(0, 0, 0);
-    Object.assign(st, { alt: 0, altVel: 0, frente: 0, frenteVel: 0, noAr: false, pousando: false, arrastando: false, pendente: null, fase: 0, ultimaInteracao: -1e9 });
+    st.q.setFromAxisAngle(EIXO_Y, poseDe(g)); st.w.set(0, 0, 0);
+    Object.assign(st, { alt: 0, altVel: 0, frente: 0, frenteVel: 0, zoom: 0, pertoAte: 0, noAr: false, pousando: false, arrastando: false, pendente: null, fase: 0, ultimaInteracao: -1e9 });
     g.liq.prim = true;
   }
 
@@ -592,6 +596,7 @@ export function iniciarVitrine(canvas, opcoes = {}) {
     if (e.button > 0) return;
     const g = escolher(e.clientX, e.clientY);
     if (!g?.st.interativa) return;
+    g.st.pertoAte = agoraMs() + 1500;
     agarrada = g;
     if (e.pointerType === 'mouse') comecar(e);
     else g.st.pendente = { x: e.clientX, y: e.clientY };
@@ -617,7 +622,8 @@ export function iniciarVitrine(canvas, opcoes = {}) {
       cam.alvoAz = -hx * 0.05; cam.alvoEl = hy * 0.02;
       // nas duas: a mão aberta só sobre uma garrafa
       if (modo === 'ambas' && e.target === canvas) {
-        const s = !!escolher(e.clientX, e.clientY);
+        perto = escolher(e.clientX, e.clientY);
+        const s = !!perto;
         if (s !== sobre) { sobre = s; canvas.style.cursor = s ? 'grab' : ''; }
       } else if (!sobre) { sobre = true; canvas.style.cursor = 'grab'; }
     }
@@ -644,7 +650,7 @@ export function iniciarVitrine(canvas, opcoes = {}) {
     st.w.lerp(wInst, 0.5);      // só a estimativa da velocidade para a inércia ao soltar
     st.ultimaInteracao = agora;
   }, sinal);
-  canvas.addEventListener('pointerleave', () => { if (!agarrada?.st.arrastando) { cam.alvoAz = 0; cam.alvoEl = 0; } }, sinal);
+  canvas.addEventListener('pointerleave', () => { perto = null; if (!agarrada?.st.arrastando) { cam.alvoAz = 0; cam.alvoEl = 0; } }, sinal);
   const camDir = new THREE.Vector3();
   function teclar(g, e) {
     const st = g?.st;
@@ -705,7 +711,7 @@ export function iniciarVitrine(canvas, opcoes = {}) {
   const cimaGarrafa = new THREE.Vector3(), qErro = new THREE.Quaternion(), torque = new THREE.Vector3();
   const wDt = new THREE.Vector3();
   function mover(g, dt, agora, pose) {
-    const st = g.st, POSE = g.tipo.pose, RAIO_QUINA = g.raioQuina, centro = g.centro;
+    const st = g.st, POSE = poseDe(g), RAIO_QUINA = g.raioQuina, centro = g.centro;
     const parado = (agora - st.ultimaInteracao) / 1000;
     cimaGarrafa.copy(EIXO_Y).applyQuaternion(st.q);
     if (st.arrastando) {
@@ -763,6 +769,8 @@ export function iniciarVitrine(canvas, opcoes = {}) {
     const frenteAlvo = noAlto && modo === 'ambas' ? FRENTE : 0;
     st.frenteVel += ((frenteAlvo - st.frente) * kA - st.frenteVel * 2 * Math.sqrt(kA)) * dt;
     st.frente += st.frenteVel * dt;
+    const zoomAlvo = modo === 'ambas' && (perto === g || agora < st.pertoAte || st.arrastando) ? ZOOM : 0;
+    st.zoom += (zoomAlvo - st.zoom) * (1 - Math.exp(-dt * (reduzir ? 30 : 9)));
     pose.uy = cimaGarrafa.y; pose.lado = lado; pose.baixo = centro + st.alt - (centro * uy + RAIO_QUINA * lado);
   }
 
@@ -938,17 +946,17 @@ export function iniciarVitrine(canvas, opcoes = {}) {
     const pose = g.pose;
     if (!st.interativa) {
       // termina na pose de vitrine
-      st.q.setFromAxisAngle(EIXO_Y, tipo.pose - 0.55 * (1 - easeInOut(clamp01(t / T.tampaFim))));
+      st.q.setFromAxisAngle(EIXO_Y, poseDe(g) - 0.55 * (1 - easeInOut(clamp01(t / T.tampaFim))));
       st.w.set(0, 0, 0); st.alt = 0; st.altVel = 0; st.noAr = false; st.frente = 0; st.frenteVel = 0;
       pose.uy = 1; pose.lado = 0; pose.baixo = 0;
     } else mover(g, dt, agora, pose);
-    g.raiz.position.set(g.x, g.centro + st.alt, st.frente);
+    g.raiz.position.set(g.x, g.centro + st.alt, st.frente + st.zoom);
     g.raiz.quaternion.copy(st.q);
 
     // sombra de contato: estica com a garrafa deitada, abre e some quando ela sobe
     const sombra = g.sombra;
     const ax = eixoSombra.copy(EIXO_Y).applyQuaternion(st.q);
-    sombra.position.x = g.x; sombra.position.z = st.frente;
+    sombra.position.x = g.x; sombra.position.z = st.frente + st.zoom;
     sombra.rotation.set(-Math.PI / 2, 0, Math.atan2(-ax.z, ax.x));
     const abre = 1 + Math.max(pose.baixo, 0) * 14;
     sombra.scale.set((1 + pose.lado * tipo.esticaSombra) * abre * g.escalaSombra, abre * g.escalaSombra, 1);
