@@ -122,7 +122,7 @@ function aplicarCor(c) {
   if (numero) {
     const fs = Math.round(4.6 * pxV), y = cy + P.logo * pxV * .82, txt = 'Nº ' + String(numero).padStart(4, '0');
     for (const [k, c] of [[a, C.logo], [b, orm(C.lr, C.lm)]]) {
-      k.save(); k.scale(pxH / pxV, 1); k.fillStyle = c; k.font = `600 ${fs}px "DM Sans", Arial, sans-serif`; k.textAlign = 'center';
+      k.save(); k.scale(pxH / pxV, 1); k.fillStyle = c; k.font = `600 ${fs}px "DM Mono", ui-monospace, monospace`; k.textAlign = 'center';
       if ('letterSpacing' in k) k.letterSpacing = Math.round(fs * .14) + 'px';
       k.fillText(txt, (W / 2) * pxV / pxH, y); k.restore();
     }
