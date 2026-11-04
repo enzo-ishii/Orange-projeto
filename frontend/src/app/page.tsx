@@ -54,6 +54,15 @@ const artClass: Record<StoryCard["artType"], string> = {
 const storyCards: StoryCard[] = [
   {
     number: "01",
+    title: "Um cuidado a mais.",
+    description: "Quer ir além do suco? O Orange+ vem enriquecido com colágeno, pra quem quer explorar novas possibilidades sem mudar a rotina.",
+    caption: "VOCÊ ESCOLHE",
+    style: "card-cream",
+    artType: "spark",
+    artText: "✦",
+  },
+  {
+    number: "02",
     title: "Fruta de verdade.",
     description: "Só laranja espremida, sem água e sem açúcar adicionado. Um suco 100% natural, com o sabor fresco da fruta e nada de enrolação.",
     caption: "SIMPLES ASSIM",
@@ -62,22 +71,13 @@ const storyCards: StoryCard[] = [
     artText: "✳",
   },
   {
-    number: "02",
+    number: "03",
     title: "Design com propósito.",
     description: "Uma garrafa pensada pra acompanhar seu ritmo, do café da manhã ao fim do treino. Quando acabar, devolva: ela volta pro ciclo e você ganha cashback.",
     caption: "MENOS DESCARTE",
     style: "card-dark",
     artType: "montagem",
     artText: "O",
-  },
-  {
-    number: "03",
-    title: "Um cuidado a mais.",
-    description: "Quer ir além do suco? O Orange+ vem enriquecido com colágeno, pra quem quer explorar novas possibilidades sem mudar a rotina.",
-    caption: "VOCÊ ESCOLHE",
-    style: "card-cream",
-    artType: "spark",
-    artText: "✦",
   },
 ];
 
