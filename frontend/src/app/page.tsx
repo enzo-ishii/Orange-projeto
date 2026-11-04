@@ -30,7 +30,7 @@ type StoryCard = {
   description: string;
   caption: string;
   style: "card-orange" | "card-dark" | "card-cream";
-  artType: "fruit" | "circle" | "spark";
+  artType: "fruit" | "circle" | "spark" | "montagem";
   artText: string;
 };
 
@@ -44,6 +44,7 @@ const PETELECO = { arrasto: 30, velocidade: 0.5 };
 const artClass: Record<StoryCard["artType"], string> = {
   fruit: "fruit-symbol",
   circle: "circle-art",
+  montagem: "montagem-art",
   spark: "spark-art",
 };
 
@@ -63,7 +64,7 @@ const storyCards: StoryCard[] = [
     description: "Uma garrafa pensada pra acompanhar seu ritmo, do café da manhã ao fim do treino. Quando acabar, devolva: ela volta pro ciclo e você ganha cashback.",
     caption: "MENOS DESCARTE",
     style: "card-dark",
-    artType: "circle",
+    artType: "montagem",
     artText: "O",
   },
   {
@@ -476,11 +477,29 @@ function StoryCardView({ card, className = "", ...resto }: { card: StoryCard } &
   return (
     <article className={`story-card ${card.style} ${className}`} {...resto}>
       <span className="card-number">{card.number}</span>
-      <div className={artClass[card.artType]} aria-hidden="true">{card.artText}</div>
+      {card.artType === "montagem" ? <GarrafaMontagem /> : <div className={artClass[card.artType]} aria-hidden="true">{card.artText}</div>}
       <h3>{card.title}</h3>
       <p>{card.description}</p>
       <span className="card-caption">{card.caption}</span>
     </article>
+  );
+}
+
+// A garrafa se montando peça por peça: corpo, aro de aço, tampa, alça e o logo gravado. Repete em loop.
+function GarrafaMontagem() {
+  return (
+    <svg className="montagem-art" viewBox="0 0 160 300" aria-hidden="true">
+      <rect className="mt-corpo" x="50" y="96" width="60" height="190" rx="14" />
+      <rect className="mt-aro" x="48" y="80" width="64" height="18" rx="3" />
+      <rect className="mt-tampa" x="49" y="64" width="62" height="17" rx="6" />
+      <rect className="mt-aba" x="68" y="58" width="24" height="7" rx="3" />
+      <path className="mt-alca" d="M47 89 C 30 140, 130 140, 113 89" pathLength="1" />
+      <g className="mt-logo" transform="translate(57 150) scale(.23)">
+        <path d="M153.9 73.6 A68 68 0 1 1 108.9 47.6" pathLength="1" />
+        <path d="M122 70 L130 50" pathLength="1" />
+        <path className="mt-folha" d="M128,50 Q150,10 195,22 Q175,62 128,50 Z" />
+      </g>
+    </svg>
   );
 }
 
