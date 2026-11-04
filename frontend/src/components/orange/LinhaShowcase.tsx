@@ -13,20 +13,16 @@ export default function LinhaShowcase() {
   const [angulos, setAngulos] = useState<Miniatura[]>([]);
   const [angulo, setAngulo] = useState(0);
   const [falhou, setFalhou] = useState(false);
-  const [numero, setNumero] = useState(427);
-  const [digitado, setDigitado] = useState("427");
-
-  const escolherNumero = (texto: string) => {
-    setDigitado(texto);
-    const n = Math.round(Number(texto));
-    if (n >= 1 && n <= 1000) { setNumero(n); linhaRef.current?.numero(n); }
-  };
+  // Os números saem pela ordem de compra. Quantos já foram vendidos vem da variável NEXT_PUBLIC_FOUNDERS_VENDIDOS.
+  const vendidos = Math.min(1000, Math.max(0, Number(process.env.NEXT_PUBLIC_FOUNDERS_VENDIDOS) || 0));
+  const esgotado = vendidos >= 1000;
+  const numero = esgotado ? 1000 : vendidos + 1;
   const numeroTexto = String(numero).padStart(4, "0");
 
   useEffect(() => {
     if (!canvasRef.current) return;
     try {
-      linhaRef.current = iniciarLinha(canvasRef.current, { produto: "copo", cor: "preto", numero: 427, aoMiniaturas: setAngulos, aoMudarAngulo: setAngulo });
+      linhaRef.current = iniciarLinha(canvasRef.current, { produto: "copo", cor: "preto", numero, aoMiniaturas: setAngulos, aoMudarAngulo: setAngulo });
     } catch {
       setFalhou(true);
     }
@@ -65,23 +61,21 @@ export default function LinhaShowcase() {
       <div className="founders-edicao">
         <div className="founders-numero">
           <p className="founders-algarismos" aria-live="polite"><span className="sr-only">Número </span>{numeroTexto}</p>
-          <label htmlFor="founders-numero">
-            Escolha um número de 1 a 1000
-            <input id="founders-numero" type="number" min={1} max={1000} inputMode="numeric" value={digitado}
-              onChange={(e) => escolherNumero(e.target.value)} />
-          </label>
+          <p className="founders-status">
+            {esgotado ? "Os mil números já têm dono. A edição fechou." : `Próximo número livre. ${vendidos} de 1000 já têm dono.`}
+          </p>
         </div>
         <div className="founders-texto">
           <h3>Mil números. Um deles é seu.</h3>
-          <p>O copo e a garrafa da primeira leva saem só em preto, com o número de cada fundador gravado a laser no inox, logo abaixo do logo. Quem entra primeiro mantém os benefícios enquanto a assinatura estiver ativa.</p>
+          <p>O copo e a garrafa da primeira leva saem só em preto, com o número de cada fundador gravado a laser no inox, logo abaixo do logo. O número segue a ordem de compra: quem garante primeiro fica com o menor. Quem entra mantém os benefícios enquanto a assinatura estiver ativa.</p>
           <dl>
             <div><dt>Numerada</dt><dd>De 0001 a 1000. Cada número existe uma vez só.</dd></div>
             <div><dt>Primeiro a provar</dt><dd>Sabores e edições novas chegam antes para quem é fundador.</dd></div>
             <div><dt>Não volta</dt><dd>Quando o milésimo número sair, a edição fecha.</dd></div>
           </dl>
           <a className="button button-dark founders-acao"
-            href={`mailto:oi@orange.com.br?subject=${encodeURIComponent(`Quero o número ${numeroTexto} da Founders Edition`)}&body=${encodeURIComponent(`Oi! Quero entrar na lista de espera da Founders Edition. Se ainda estiver livre, quero o número ${numeroTexto}.`)}`}>
-            Quero o número {numeroTexto}
+            href={`mailto:oi@orange.com.br?subject=${encodeURIComponent(`Founders Edition: quero garantir o número ${numeroTexto}`)}&body=${encodeURIComponent(`Oi! Quero entrar na lista de espera da Founders Edition. Quero garantir o próximo número livre (hoje, o ${numeroTexto}).`)}`}>
+            {esgotado ? "Entrar na lista para a próxima edição" : `Garantir o número ${numeroTexto}`}
           </a>
         </div>
       </div>

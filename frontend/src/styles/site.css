@@ -1855,10 +1855,7 @@ p { text-wrap: pretty; }
 @media (max-width: 860px) { .founders-edicao { grid-template-columns: minmax(0, 1fr); } }
 .founders-numero { display: grid; gap: 20px; min-width: 0; }
 .founders-algarismos { margin: 0; font-family: Manrope, 'DM Sans', system-ui, sans-serif; font-weight: 800; font-size: clamp(110px, 21vw, 300px); line-height: .82; letter-spacing: -.06em; font-variant-numeric: tabular-nums; color: var(--orange); }
-.founders-numero label { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: 16px; color: var(--text); }
-.founders-numero input { width: 120px; padding: 12px 16px; border: 0; border-radius: 999px; background: var(--panel-2); color: var(--text); font: 600 18px 'DM Sans', system-ui, sans-serif; font-variant-numeric: tabular-nums; transition: background-color .2s; }
-.founders-numero input:hover { background: var(--panel); }
-.founders-numero input:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.founders-status { margin: 0; font-size: 17px; color: var(--text); }
 .founders-texto { display: grid; gap: 20px; min-width: 0; }
 .founders-texto h3 { margin: 0; font-size: clamp(32px, 4.4vw, 60px); line-height: 1; letter-spacing: -.035em; text-wrap: balance; }
 .founders-texto > p { margin: 0; max-width: 52ch; font-size: 17px; line-height: 1.55; color: var(--text); }
