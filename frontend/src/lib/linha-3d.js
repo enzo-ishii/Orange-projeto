@@ -20,7 +20,7 @@ function logoCurvo(dst, cor, Lmm, rL, cxPx, cyPx, pxH, pxV) {
   }
 }
 export const CORES = {
-  preto: { nome: 'Preto', base: '#151515', rug: .4, metal: 0, coat: .35, logo: '#F2F3F4', lr: .25, lm: .3 },
+  preto: { nome: 'Preto', base: '#151515', rug: .4, metal: 0, coat: .35, logo: '#D2D4D6', lr: .28, lm: 1 },
   prata: { nome: 'Prata', base: '#C9CDD1', rug: .3, metal: 1, coat: 0, logo: '#262728', lr: .55, lm: .2, escovado: true },
   osso: { nome: 'Osso', base: '#EAE3D6', rug: .25, metal: 0, coat: 1, logo: '#6E7276', lr: .3, lm: .6 },
   laranja: { nome: 'Laranja-sangue', base: '#B8400D', rug: .24, metal: 0, coat: 1, logo: '#F0F1F2', lr: .28, lm: .5 },
@@ -54,7 +54,7 @@ scene.add(new THREE.HemisphereLight('#FFFFFF', '#DDDDDD', .35));
 // Luz de contorno fria atrás, à direita: separa o preto do produto do fundo escuro.
 { const rim = new THREE.DirectionalLight('#d6e6ff', 1.6); rim.position.set(.7, .35, -.6); scene.add(rim); const rim2 = new THREE.DirectionalLight('#ffe2c8', .8); rim2.position.set(-.7, .3, -.5); scene.add(rim2); }
 const sombra = (() => { const c = tela(256, 256), k = c.getContext('2d'), g = k.createRadialGradient(128, 128, 0, 128, 128, 128);
-  g.addColorStop(0, 'rgba(0,0,0,.42)'); g.addColorStop(.45, 'rgba(0,0,0,.12)'); g.addColorStop(1, 'rgba(0,0,0,0)'); k.fillStyle = g; k.fillRect(0, 0, 256, 256);
+  g.addColorStop(0, 'rgba(0,0,0,.72)'); g.addColorStop(.4, 'rgba(0,0,0,.22)'); g.addColorStop(1, 'rgba(0,0,0,0)'); k.fillStyle = g; k.fillRect(0, 0, 256, 256);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false }));
   m.rotation.x = -Math.PI / 2; m.position.y = .0004; scene.add(m); return m; })();
 
