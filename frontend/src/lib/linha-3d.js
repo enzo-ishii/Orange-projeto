@@ -19,7 +19,7 @@ function logoCurvo(dst, cor, Lmm, rL, cxPx, cyPx, pxH, pxV) {
   }
 }
 export const CORES = {
-  preto: { nome: 'Preto', base: '#121212', rug: .22, metal: 0, coat: 1, logo: '#E6E8EA', lr: .28, lm: .55 },
+  preto: { nome: 'Preto', base: '#141414', rug: .5, metal: 0, coat: .12, logo: '#E6E8EA', lr: .35, lm: .5 },
   prata: { nome: 'Prata', base: '#C9CDD1', rug: .3, metal: 1, coat: 0, logo: '#262728', lr: .55, lm: .2, escovado: true },
   osso: { nome: 'Osso', base: '#EAE3D6', rug: .25, metal: 0, coat: 1, logo: '#6E7276', lr: .3, lm: .6 },
   laranja: { nome: 'Laranja-sangue', base: '#B8400D', rug: .24, metal: 0, coat: 1, logo: '#F0F1F2', lr: .28, lm: .5 },
@@ -45,7 +45,8 @@ renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2)); renderer.toneMapping
 const scene = new THREE.Scene();
 { const s = new THREE.Scene(); s.add(new THREE.Mesh(new THREE.BoxGeometry(8, 6, 8), new THREE.MeshBasicMaterial({ color: '#202020', side: THREE.BackSide })));
   const p = (w, h, k, pos) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color('#FFF').multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(...pos); m.lookAt(0, .3, 0); s.add(m); };
-  p(.5, 3, 7, [-1.5, .7, .5]); p(.4, 2.6, 4, [1.4, .6, .8]); p(2, 2, 2.5, [0, 2.6, .2]); p(1.4, .7, 1.2, [0, .3, 2.2]);
+  // luz difusa (painéis grandes e fracos): sem faixas fixas de reflexo no corpo
+  p(3.2, 3.2, 1.3, [-1.8, .9, 1]); p(3.2, 3.2, 1.1, [1.8, .9, 1]); p(3, 3, 1.4, [0, 2.6, .2]); p(3, 1.6, .9, [0, .4, 2.2]);
   const g = new THREE.PMREMGenerator(renderer); scene.environment = g.fromScene(s, 0).texture; g.dispose(); }
 scene.add(new THREE.HemisphereLight('#FFFFFF', '#DDDDDD', .35));
 const sombra = (() => { const c = tela(256, 256), k = c.getContext('2d'), g = k.createRadialGradient(128, 128, 0, 128, 128, 128);
@@ -59,7 +60,7 @@ const tx = { col: new THREE.CanvasTexture(tela(4, 4)), rm: new THREE.CanvasTextu
 const M = {
   corpo: new THREE.MeshPhysicalMaterial({ map: tx.col, roughnessMap: tx.rm, metalnessMap: tx.rm, roughness: 1, metalness: 1, clearcoatRoughness: .12 }),
   casco: new THREE.MeshPhysicalMaterial({ side: THREE.DoubleSide, clearcoatRoughness: .12 }),
-  aco: new THREE.MeshPhysicalMaterial({ color: '#D8DBDE', metalness: 1, roughness: .14 }),
+  aco: new THREE.MeshPhysicalMaterial({ color: '#D8DBDE', metalness: 1, roughness: .32 }),
   dentro: new THREE.MeshPhysicalMaterial({ color: '#B4B8BC', metalness: 1, roughness: .32, side: THREE.BackSide }),
   fundo: new THREE.MeshPhysicalMaterial({ color: '#A9ADB1', metalness: 1, roughness: .35 }),
   tampa: new THREE.MeshPhysicalMaterial({ color: '#141414', roughness: .18, clearcoat: 1, clearcoatRoughness: .08, side: THREE.DoubleSide }),
