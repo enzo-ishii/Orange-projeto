@@ -331,7 +331,7 @@ export default function Home() {
       {/* Linha Orange: copo e garrafa térmicos em 3D, como página de produto. */}
       <section className="linha-section section-shell" id="linha">
         <div className="linha-heading">
-          <h2 data-reveal>Preto. Inox.<br />Seu número.</h2>
+          <h2 data-reveal>Founders Edition</h2>
         </div>
         <LinhaShowcase />
         <p className="plan-note" data-reveal>* Edição em preparação. Condições e prazos serão enviados primeiro para a lista de espera.</p>
