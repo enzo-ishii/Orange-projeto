@@ -11,7 +11,6 @@ import { useRevelarAoRolar } from "@/lib/use-revelar-ao-rolar";
 import { useInclinacao3D } from "@/lib/use-inclinacao-3d";
 import { useNumerosQueContam } from "@/lib/use-numeros-que-contam";
 import { useBotoesMagneticos } from "@/lib/use-botoes-magneticos";
-import { useSucoDerramando } from "@/lib/use-suco-derramando";
 
 // Garrafa 3D só no navegador (WebGL). Enquanto carrega, o espaço fica vazio e a entrada enche a garrafa.
 const GarrafaHero = dynamic(() => import("@/components/orange/GarrafaHero"), { ssr: false });
@@ -124,7 +123,6 @@ export default function Home() {
   const [secaoAtiva, setSecaoAtiva] = useState<string | null>(null);
   const siteRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
-  const derrameRef = useRef<HTMLDivElement>(null);
   const planosRef = useRef<HTMLElement>(null);
   const [cardsSaindo, setCardsSaindo] = useState<CardSaindo[]>([]);
   const vooId = useRef(0);
@@ -136,7 +134,6 @@ export default function Home() {
   useInclinacao3D(siteRef);
   useNumerosQueContam(siteRef);
   useBotoesMagneticos(siteRef);
-  useSucoDerramando(derrameRef, planosRef);
 
   // Aquece o laranja do fundo de forma contínua conforme a pessoa percorre a página.
   // A variável CSS é escrita direto no elemento (1x por frame) para não re-renderizar o React a cada scroll.
@@ -263,10 +260,6 @@ export default function Home() {
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <div className="ambient ambient-one" aria-hidden="true" />
       <div className="ambient ambient-two" aria-hidden="true" />
-      <div className="derrame-tela" ref={derrameRef} aria-hidden="true">
-        <div className="derrame-liquido" />
-        <span className="derrame-gota" /><span className="derrame-gota" /><span className="derrame-gota" /><span className="derrame-gota" /><span className="derrame-gota" /><span className="derrame-gota" /><span className="derrame-gota" />
-      </div>
 
       {/* Header em 3 peças separadas: logo num círculo, navegação numa pílula e ações à direita. */}
       <header className={stuck ? "navbar is-stuck" : "navbar"}>
