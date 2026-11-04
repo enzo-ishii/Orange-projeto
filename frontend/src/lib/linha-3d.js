@@ -30,12 +30,12 @@ export const PRODUTOS = {
   copo: { titulo: 'Copo Orange 473 ml', lead: 'Inox com parede dupla a vácuo, aro de aço escovado e tampa deslizante. O logo vai grande, no centro, gravado a laser até aparecer o metal.',
     specs: [['Capacidade', '473 ml'], ['Medidas', 'Ø 88 mm em cima, Ø 63 mm na base, 15 cm'], ['Material', 'Inox 304, parede dupla a vácuo'], ['Tampa', 'Deslizante, fecha o bocal'], ['Base', 'Cabe no porta-copo do carro']],
     rTopo: 43, rBase: 31.5, corpoAte: 128, aro: 17, logo: 50, sombra: .16,
-    angulos: [['Frente', [0, .1, .66], [0, .074, 0], [0, 0, 0, 0], [0, 0, 0, 0, 0]], ['Tampa aberta', [0, .13, .95], [0, .1, 0], [0, -.15, -.45, .015], [-.03, .05, .015, .7, .3]],
+    angulos: [['Frente', [0, .088, .54], [0, .076, 0], [0, 0, 0, 0], [0, 0, 0, 0, 0]], ['Tampa aberta', [0, .13, .95], [0, .1, 0], [0, -.15, -.45, .015], [-.03, .05, .015, .7, .3]],
       ['Três quartos', [0, .1, .66], [0, .074, 0], [0, -.62, 0, 0], [0, 0, 0, 0, 0]], ['Tampa de perto', [0, .42, .22], [0, .14, 0], [0, 0, 0, 0], [0, 0, 0, 0, 0]]] },
   garrafa: { titulo: 'Garrafa Orange 600 ml', lead: 'Mesma tampa deslizante do copo, corpo reto e fino e uma alça que deita quando não está em uso. Logo grande no centro, gravado a laser.',
     specs: [['Capacidade', '600 ml'], ['Medidas', 'Ø 71 mm, 23,5 cm de altura'], ['Material', 'Inox 304, parede dupla a vácuo'], ['Tampa', 'Deslizante, a mesma do copo em tamanho menor'], ['Alça', 'Gira no aro e deita sobre o corpo']],
     rTopo: 35, rBase: 35, corpoAte: 212, aro: 18, logo: 58, sombra: .13, alca: true,
-    angulos: [['Frente', [0, .14, .95], [0, .118, 0], [0, 0, 0, 0], [0, 0, 0, 0, 0]], ['Tampa aberta', [0, .17, 1.2], [0, .14, 0], [0, -.2, -.4, .015], [-.03, .055, .015, .7, .3]],
+    angulos: [['Frente', [0, .13, .78], [0, .12, 0], [0, 0, 0, 0], [0, 0, 0, 0, 0]], ['Tampa aberta', [0, .17, 1.2], [0, .14, 0], [0, -.2, -.4, .015], [-.03, .055, .015, .7, .3]],
       ['Três quartos', [0, .14, .95], [0, .118, 0], [0, -.62, 0, 0], [0, 0, 0, 0, 0]], ['Tampa de perto', [0, .55, .26], [0, .225, 0], [0, 0, 0, 0], [0, 0, 0, 0, 0]]] },
 };
 
@@ -51,6 +51,8 @@ const scene = new THREE.Scene();
   p(1.6, 2.6, 3.2, [-1.7, .9, .9]); p(.25, 2.4, 6, [-1.1, .7, -1.3]); p(.25, 2.4, 5, [1.2, .7, -1.2]); p(2.4, 2.4, 1, [0, 2.6, 0]); p(2, 1.2, .35, [1.6, .5, 1.2]);
   const g = new THREE.PMREMGenerator(renderer); scene.environment = g.fromScene(s, 0).texture; g.dispose(); }
 scene.add(new THREE.HemisphereLight('#FFFFFF', '#DDDDDD', .35));
+// Luz de contorno fria atrás, à direita: separa o preto do produto do fundo escuro.
+{ const rim = new THREE.DirectionalLight('#d6e6ff', 1.6); rim.position.set(.7, .35, -.6); scene.add(rim); const rim2 = new THREE.DirectionalLight('#ffe2c8', .8); rim2.position.set(-.7, .3, -.5); scene.add(rim2); }
 const sombra = (() => { const c = tela(256, 256), k = c.getContext('2d'), g = k.createRadialGradient(128, 128, 0, 128, 128, 128);
   g.addColorStop(0, 'rgba(0,0,0,.42)'); g.addColorStop(.45, 'rgba(0,0,0,.12)'); g.addColorStop(1, 'rgba(0,0,0,0)'); k.fillStyle = g; k.fillRect(0, 0, 256, 256);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false }));
@@ -140,6 +142,11 @@ const ctl = new OrbitControls(cam, canvas); ctl.enableDamping = true; ctl.enable
 // e, no toque, arrastar para cima ou para baixo rola a página; só o arraste para os lados gira o 3D.
 ctl.enableZoom = false;
 canvas.style.touchAction = 'pan-y';
+// Vitrine: gira devagar sozinho, como produto em exposição; para quando a pessoa pega para girar.
+// A câmera fica perto da altura dos olhos (sem olhar de cima ou de baixo demais).
+ctl.minPolarAngle = 1.2; ctl.maxPolarAngle = 1.62;
+ctl.autoRotate = !matchMedia('(prefers-reduced-motion: reduce)').matches; ctl.autoRotateSpeed = .45;
+ctl.addEventListener('start', () => { ctl.autoRotate = false; });
 let atual = { copo: [0, 0, 0, 0], tampa: [0, 0, 0, 0, 0] }, destino = null;
 function pose(p) { copo.rotation.set(p.copo[0], p.copo[1], p.copo[2]); copo.position.y = p.copo[3]; tampa.position.set(p.tampa[0], p.tampa[1], p.tampa[2]); tampa.rotation.set(p.tampa[3], 0, p.tampa[4]); sombra.material.opacity = 1 - Math.min(1, p.copo[3] * 25); }
 function irPara(i, ja) {

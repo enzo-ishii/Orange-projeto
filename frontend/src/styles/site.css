@@ -1838,7 +1838,7 @@ p { text-wrap: pretty; }
 .linha-heading { display: grid; gap: 14px; }
 .linha-3d { display: grid; gap: 18px; justify-items: center; }
 .linha-palco { width: 100%; min-width: 0; }
-.linha-palco canvas { display: block; width: 100%; height: min(72svh, 640px); touch-action: pan-y pinch-zoom; cursor: grab; }
+.linha-palco canvas { display: block; width: 100%; height: min(82svh, 780px); touch-action: pan-y pinch-zoom; cursor: grab; }
 .linha-palco canvas:active { cursor: grabbing; }
 .linha-palco canvas:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 16px; }
 .linha-barra { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; max-width: 100%; padding: 6px; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb, var(--panel) 80%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
@@ -1907,3 +1907,19 @@ p { text-wrap: pretty; }
 /* Carrossel dos cards: o dedo arrasta para os lados (o navegador fica com a rolagem vertical) e o gesto lateral do trackpad não volta a página. */
 .story-cards.is-carousel { overscroll-behavior-x: contain; }
 .story-cards.is-carousel .story-card { touch-action: pan-y; }
+
+/* Troca de produto discreta: só texto, o ativo em tinta cheia. */
+.linha-produtos { display: flex; gap: clamp(20px, 4vw, 40px); justify-content: center; }
+.linha-produtos button { border: 0; background: none; padding: 8px 2px; font: 500 17px 'DM Sans', system-ui, sans-serif; color: var(--muted); cursor: pointer; transition: color .25s; }
+.linha-produtos button:hover, .linha-produtos button[aria-pressed="true"] { color: var(--text); }
+.linha-produtos button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 4px; }
+
+/* Linha Orange, versão vitrine: título grande e centralizado, número com o total apagado, CTA cheio. */
+.linha-heading { justify-items: center; text-align: center; }
+.linha-heading h2 { margin: 0; font-size: clamp(48px, 7vw, 112px); line-height: 1; letter-spacing: -.035em; text-wrap: balance; }
+.founders-algarismos { font-size: clamp(120px, 16vw, 220px); }
+.founders-total { font-size: .28em; letter-spacing: -.01em; opacity: .3; margin-left: .2em; }
+.founders-lista { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 10px; font-size: 18px; }
+.founders-texto > p { font-size: 20px; }
+.founders-acao.button { min-height: 56px; padding: 0 30px; display: inline-flex; align-items: center; border-radius: 999px; background: var(--orange); color: #111; border: 0; }
+.linha-section > .plan-note { margin-top: 32px; }
