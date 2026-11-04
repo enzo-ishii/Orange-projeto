@@ -135,6 +135,10 @@ function aplicarCor(c) {
 
 const cam = new THREE.PerspectiveCamera(18, 1, .01, 10);
 const ctl = new OrbitControls(cam, canvas); ctl.enableDamping = true; ctl.enablePan = false; ctl.minDistance = .22; ctl.maxDistance = 1.8;
+// Não briga com a rolagem da página: a roda do mouse rola a página (o zoom fica nos botões + e −)
+// e, no toque, arrastar para cima ou para baixo rola a página; só o arraste para os lados gira o 3D.
+ctl.enableZoom = false;
+canvas.style.touchAction = 'pan-y';
 let atual = { copo: [0, 0, 0, 0], tampa: [0, 0, 0, 0, 0] }, destino = null;
 function pose(p) { copo.rotation.set(p.copo[0], p.copo[1], p.copo[2]); copo.position.y = p.copo[3]; tampa.position.set(p.tampa[0], p.tampa[1], p.tampa[2]); tampa.rotation.set(p.tampa[3], 0, p.tampa[4]); sombra.material.opacity = 1 - Math.min(1, p.copo[3] * 25); }
 function irPara(i, ja) {
