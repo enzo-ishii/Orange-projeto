@@ -19,7 +19,7 @@ function logoCurvo(dst, cor, Lmm, rL, cxPx, cyPx, pxH, pxV) {
   }
 }
 export const CORES = {
-  preto: { nome: 'Preto', base: '#141414', rug: .5, metal: 0, coat: .12, logo: '#E6E8EA', lr: .35, lm: .5 },
+  preto: { nome: 'Preto', base: '#151515', rug: .4, metal: 0, coat: .35, logo: '#F2F3F4', lr: .25, lm: .3 },
   prata: { nome: 'Prata', base: '#C9CDD1', rug: .3, metal: 1, coat: 0, logo: '#262728', lr: .55, lm: .2, escovado: true },
   osso: { nome: 'Osso', base: '#EAE3D6', rug: .25, metal: 0, coat: 1, logo: '#6E7276', lr: .3, lm: .6 },
   laranja: { nome: 'Laranja-sangue', base: '#B8400D', rug: .24, metal: 0, coat: 1, logo: '#F0F1F2', lr: .28, lm: .5 },
@@ -33,7 +33,7 @@ export const PRODUTOS = {
       ['Três quartos', [0, .1, .66], [0, .074, 0], [0, -.62, 0, 0], [0, 0, 0, 0, 0]], ['Tampa de perto', [0, .42, .22], [0, .14, 0], [0, 0, 0, 0], [0, 0, 0, 0, 0]]] },
   garrafa: { titulo: 'Garrafa Orange 600 ml', lead: 'Mesma tampa deslizante do copo, corpo reto e fino e uma alça que deita quando não está em uso. Logo grande no centro, gravado a laser.',
     specs: [['Capacidade', '600 ml'], ['Medidas', 'Ø 71 mm, 23,5 cm de altura'], ['Material', 'Inox 304, parede dupla a vácuo'], ['Tampa', 'Deslizante, a mesma do copo em tamanho menor'], ['Alça', 'Gira no aro e deita sobre o corpo']],
-    rTopo: 35, rBase: 35, corpoAte: 212, aro: 18, logo: 52, sombra: .13, alca: true,
+    rTopo: 35, rBase: 35, corpoAte: 212, aro: 18, logo: 58, sombra: .13, alca: true,
     angulos: [['Frente', [0, .14, .95], [0, .118, 0], [0, 0, 0, 0], [0, 0, 0, 0, 0]], ['Tampa aberta', [0, .17, 1.2], [0, .14, 0], [0, -.2, -.4, .015], [-.03, .055, .015, .7, .3]],
       ['Três quartos', [0, .14, .95], [0, .118, 0], [0, -.62, 0, 0], [0, 0, 0, 0, 0]], ['Tampa de perto', [0, .55, .26], [0, .225, 0], [0, 0, 0, 0], [0, 0, 0, 0, 0]]] },
 };
@@ -46,7 +46,8 @@ const scene = new THREE.Scene();
 { const s = new THREE.Scene(); s.add(new THREE.Mesh(new THREE.BoxGeometry(8, 6, 8), new THREE.MeshBasicMaterial({ color: '#202020', side: THREE.BackSide })));
   const p = (w, h, k, pos) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color('#FFF').multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(...pos); m.lookAt(0, .3, 0); s.add(m); };
   // luz difusa (painéis grandes e fracos): sem faixas fixas de reflexo no corpo
-  p(3.2, 3.2, 1.3, [-1.8, .9, 1]); p(3.2, 3.2, 1.1, [1.8, .9, 1]); p(3, 3, 1.4, [0, 2.6, .2]); p(3, 1.6, .9, [0, .4, 2.2]);
+  // estúdio de foto de produto: softbox principal ao lado, dois filetes de luz atrás (contornam as bordas), teto suave e rebatedor fraco
+  p(1.6, 2.6, 3.2, [-1.7, .9, .9]); p(.25, 2.4, 6, [-1.1, .7, -1.3]); p(.25, 2.4, 5, [1.2, .7, -1.2]); p(2.4, 2.4, 1, [0, 2.6, 0]); p(2, 1.2, .35, [1.6, .5, 1.2]);
   const g = new THREE.PMREMGenerator(renderer); scene.environment = g.fromScene(s, 0).texture; g.dispose(); }
 scene.add(new THREE.HemisphereLight('#FFFFFF', '#DDDDDD', .35));
 const sombra = (() => { const c = tela(256, 256), k = c.getContext('2d'), g = k.createRadialGradient(128, 128, 0, 128, 128, 128);
@@ -58,9 +59,9 @@ const torno = (pts, seg = 200) => new THREE.LatheGeometry(pts.map(([r, y]) => ne
 const ret = (w, h, r) => { const s = new THREE.Shape(), x = -w / 2, y = -h / 2; s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r); s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h); s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r); s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s; };
 const tx = { col: new THREE.CanvasTexture(tela(4, 4)), rm: new THREE.CanvasTexture(tela(4, 4)) }; tx.col.colorSpace = THREE.SRGBColorSpace;
 const M = {
-  corpo: new THREE.MeshPhysicalMaterial({ map: tx.col, roughnessMap: tx.rm, metalnessMap: tx.rm, roughness: 1, metalness: 1, clearcoatRoughness: .12 }),
-  casco: new THREE.MeshPhysicalMaterial({ side: THREE.DoubleSide, clearcoatRoughness: .12 }),
-  aco: new THREE.MeshPhysicalMaterial({ color: '#D8DBDE', metalness: 1, roughness: .32 }),
+  corpo: new THREE.MeshPhysicalMaterial({ map: tx.col, roughnessMap: tx.rm, metalnessMap: tx.rm, roughness: 1, metalness: 1, clearcoatRoughness: .24 }),
+  casco: new THREE.MeshPhysicalMaterial({ side: THREE.DoubleSide, clearcoatRoughness: .24 }),
+  aco: new THREE.MeshPhysicalMaterial({ color: '#D8DBDE', metalness: 1, roughness: .24 }),
   dentro: new THREE.MeshPhysicalMaterial({ color: '#B4B8BC', metalness: 1, roughness: .32, side: THREE.BackSide }),
   fundo: new THREE.MeshPhysicalMaterial({ color: '#A9ADB1', metalness: 1, roughness: .35 }),
   tampa: new THREE.MeshPhysicalMaterial({ color: '#141414', roughness: .18, clearcoat: 1, clearcoatRoughness: .08, side: THREE.DoubleSide }),
@@ -70,7 +71,7 @@ const M = {
 };
 const logoTampa = (() => { const c = tela(256, 256); logo(c.getContext('2d'), 48, 40, 160, '#0B0B0B'); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.MeshPhysicalMaterial({ map: t, transparent: true, roughness: .5 }); })();
 
-let prod = opcoes.produto || 'copo', cor = opcoes.cor || 'preto', copo, tampa;
+let prod = opcoes.produto || 'copo', cor = opcoes.cor || 'preto', numero = opcoes.numero || 0, copo, tampa;
 function montar() {
   if (copo) { scene.remove(copo); copo.traverse((o) => o.geometry?.dispose()); }
   const P = PRODUTOS[prod], rT = P.rTopo, rB = P.rBase, h = P.corpoAte, y1 = h + P.aro, rI = rT - 1.3, k = rI / 41.7;
@@ -114,6 +115,15 @@ function aplicarCor(c) {
   const cy = H * .46, hc = P.corpoAte - .46 * alt, rL = P.rBase + (P.rTopo - P.rBase) * (hc - 4) / alt;
   const pxH = W / (2 * Math.PI * rL), pxV = H / alt;
   logoCurvo(a, C.logo, P.logo, rL, W / 2, cy, pxH, pxV); logoCurvo(b, orm(C.lr, C.lm), P.logo, rL, W / 2, cy, pxH, pxV);
+  // número da Founders Edition, pequeno, logo abaixo do logo
+  if (numero) {
+    const fs = Math.round(4.6 * pxV), y = cy + P.logo * pxV * .64, txt = 'Nº ' + String(numero).padStart(4, '0');
+    for (const [k, c] of [[a, C.logo], [b, orm(C.lr, C.lm)]]) {
+      k.save(); k.scale(pxH / pxV, 1); k.fillStyle = c; k.font = `600 ${fs}px "DM Sans", Arial, sans-serif`; k.textAlign = 'center';
+      if ('letterSpacing' in k) k.letterSpacing = Math.round(fs * .14) + 'px';
+      k.fillText(txt, (W / 2) * pxV / pxH, y); k.restore();
+    }
+  }
   // textura nova a cada troca: copo e garrafa têm tamanhos diferentes, e reaproveitar a antiga esticava o logo
   tx.col.dispose(); tx.rm.dispose();
   tx.col = new THREE.CanvasTexture(col); tx.col.colorSpace = THREE.SRGBColorSpace; tx.rm = new THREE.CanvasTexture(rm);
@@ -133,7 +143,9 @@ function irPara(i, ja) {
   if (ja) { cam.position.fromArray(c); ctl.target.fromArray(al); atual = { copo: [...cp], tampa: [...tp] }; pose(atual); destino = null; return; }
   destino = { cam: new THREE.Vector3(...c), alvo: new THREE.Vector3(...al), copo: cp, tampa: tp, t: 0 };
 }
-const tamanho = () => { const w = canvas.clientWidth, h = canvas.clientHeight, pr = renderer.getPixelRatio(); if (w && h && (canvas.width !== Math.round(w * pr) || canvas.height !== Math.round(h * pr))) { renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); } };
+// compara com a última medida desta câmera (não com o canvas): se o canvas for reaproveitado, a câmera nova ainda recebe a proporção certa
+let medida = '';
+const tamanho = () => { const w = canvas.clientWidth, h = canvas.clientHeight, pr = renderer.getPixelRatio(), m = `${w}x${h}x${pr}`; if (w && h && m !== medida) { medida = m; renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); } };
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function montarMiniaturas() {
   tamanho(); const lista = [];
@@ -151,6 +163,7 @@ montar();
 return {
   produto(p) { prod = p; montar(); },
   cor(c) { aplicarCor(c); },
+  numero(n) { numero = n; aplicarCor(cor); },
   irPara(i) { irPara(i); },
   zoom(f) { destino = null; cam.position.sub(ctl.target).multiplyScalar(f).add(ctl.target); },
   destruir() { cancelAnimationFrame(raf); ctl.dispose(); scene.traverse((o) => { o.geometry?.dispose(); }); Object.values(M).forEach((m) => m.dispose()); tx.col.dispose(); tx.rm.dispose(); renderer.dispose(); },

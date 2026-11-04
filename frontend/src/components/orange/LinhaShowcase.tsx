@@ -13,11 +13,20 @@ export default function LinhaShowcase() {
   const [angulos, setAngulos] = useState<Miniatura[]>([]);
   const [angulo, setAngulo] = useState(0);
   const [falhou, setFalhou] = useState(false);
+  const [numero, setNumero] = useState(427);
+  const [digitado, setDigitado] = useState("427");
+
+  const escolherNumero = (texto: string) => {
+    setDigitado(texto);
+    const n = Math.round(Number(texto));
+    if (n >= 1 && n <= 1000) { setNumero(n); linhaRef.current?.numero(n); }
+  };
+  const numeroTexto = String(numero).padStart(4, "0");
 
   useEffect(() => {
     if (!canvasRef.current) return;
     try {
-      linhaRef.current = iniciarLinha(canvasRef.current, { produto: "copo", cor: "preto", aoMiniaturas: setAngulos, aoMudarAngulo: setAngulo });
+      linhaRef.current = iniciarLinha(canvasRef.current, { produto: "copo", cor: "preto", numero: 427, aoMiniaturas: setAngulos, aoMudarAngulo: setAngulo });
     } catch {
       setFalhou(true);
     }
@@ -52,16 +61,29 @@ export default function LinhaShowcase() {
           <button type="button" aria-label="Aproximar" onClick={() => linhaRef.current?.zoom(0.8)}>+</button>
         </div>
       </nav>
-      <div className="founders-destaque">
-        <span className="founders-selo">Founders Edition · 0001 – 1000</span>
-        <h3>A primeira edição é numerada.<br /><span>E só existem mil.</span></h3>
-        <p>O copo e a garrafa da primeira leva saem só em preto, com o número de cada fundador gravado. Quem entra primeiro mantém o benefício enquanto a assinatura estiver ativa.</p>
-        <ul>
-          <li><b>Numerada</b><span>De 0001 a 1000, gravada a laser</span></li>
-          <li><b>Primeiro a provar</b><span>Sabores e edições novas antes de todo mundo</span></li>
-          <li><b>Não volta</b><span>Quando acabar, acabou</span></li>
-        </ul>
-        <a className="button button-dark" href={`mailto:oi@orange.com.br?subject=${encodeURIComponent("Quero entrar na lista da Founders Edition")}`}>Entrar na lista de espera</a>
+      {/* Founders Edition: o número é o protagonista. O que a pessoa digita aparece gravado no copo e na garrafa acima. */}
+      <div className="founders-edicao">
+        <div className="founders-numero">
+          <p className="founders-algarismos" aria-live="polite"><span className="sr-only">Número </span>{numeroTexto}</p>
+          <label htmlFor="founders-numero">
+            Escolha um número de 1 a 1000
+            <input id="founders-numero" type="number" min={1} max={1000} inputMode="numeric" value={digitado}
+              onChange={(e) => escolherNumero(e.target.value)} />
+          </label>
+        </div>
+        <div className="founders-texto">
+          <h3>Mil números. Um deles é seu.</h3>
+          <p>O copo e a garrafa da primeira leva saem só em preto, com o número de cada fundador gravado a laser no inox, logo abaixo do logo. Quem entra primeiro mantém os benefícios enquanto a assinatura estiver ativa.</p>
+          <dl>
+            <div><dt>Numerada</dt><dd>De 0001 a 1000. Cada número existe uma vez só.</dd></div>
+            <div><dt>Primeiro a provar</dt><dd>Sabores e edições novas chegam antes para quem é fundador.</dd></div>
+            <div><dt>Não volta</dt><dd>Quando o milésimo número sair, a edição fecha.</dd></div>
+          </dl>
+          <a className="button button-dark founders-acao"
+            href={`mailto:oi@orange.com.br?subject=${encodeURIComponent(`Quero o número ${numeroTexto} da Founders Edition`)}&body=${encodeURIComponent(`Oi! Quero entrar na lista de espera da Founders Edition. Se ainda estiver livre, quero o número ${numeroTexto}.`)}`}>
+            Quero o número {numeroTexto}
+          </a>
+        </div>
       </div>
     </div>
   );
