@@ -142,11 +142,14 @@ export default function Home() {
   // A variável CSS é escrita direto no elemento (1x por frame) para não re-renderizar o React a cada scroll.
   useEffect(() => {
     let frame = 0;
+    let ultimo = -1;
     const updateProgress = () => {
       frame = 0;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const progress = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
-      siteRef.current?.style.setProperty("--scroll-progress", progress.toFixed(3));
+      // Em degraus de 2%: a cor do fundo da página inteira só é recalculada quando muda de degrau, não a cada quadro.
+      const degrau = Math.round(progress * 50) / 50;
+      if (degrau !== ultimo) { ultimo = degrau; siteRef.current?.style.setProperty("--scroll-progress", degrau.toFixed(2)); }
       setStuck(window.scrollY > 24);
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(updateProgress); };
