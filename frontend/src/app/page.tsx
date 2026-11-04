@@ -15,6 +15,8 @@ import { useSucoDerramando } from "@/lib/use-suco-derramando";
 
 // Garrafa 3D só no navegador (WebGL). Enquanto carrega, o espaço fica vazio e a entrada enche a garrafa.
 const GarrafaHero = dynamic(() => import("@/components/orange/GarrafaHero"), { ssr: false });
+// Copo e garrafa da Linha Orange em 3D (também só no navegador).
+const LinhaShowcase = dynamic(() => import("@/components/orange/LinhaShowcase"), { ssr: false });
 
 // Os valores são fictícios e servem somente como exemplo visual.
 const plans = [
@@ -399,6 +401,16 @@ export default function Home() {
           ))}
         </div>
         <p className="plan-note" data-reveal>* Preços fictícios, usados apenas como exemplo visual. Não representam uma oferta comercial real.</p>
+      </section>
+
+      {/* Linha Orange: copo e garrafa térmicos em 3D, como página de produto. */}
+      <section className="linha-section section-shell" id="linha">
+        <div className="linha-heading">
+          <div className="section-kicker" data-reveal>LINHA ORANGE / COPO E GARRAFA</div>
+          <h2 data-reveal>Gelado o dia todo.<br /><span>Com a sua cara.</span></h2>
+        </div>
+        <LinhaShowcase />
+        <p className="plan-note" data-reveal>* Modelos em estudo. Medidas, materiais e preços ainda serão definidos.</p>
       </section>
 
       {/* Avaliações em cartões sobrepostos com navegação por setas e indicadores. */}

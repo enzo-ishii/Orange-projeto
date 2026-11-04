@@ -1832,3 +1832,36 @@ p { text-wrap: pretty; }
   to { transform: translateX(calc(var(--dir) * 115vw)) translateY(-40px) rotate(calc(var(--dir) * 26deg)); }
 }
 @keyframes card-por-baixo { from { opacity: .35; transform: scale(.9) translateY(16px); } }
+
+
+/* Linha Orange: copo e garrafa em 3D. O palco é branco, como foto de produto, nos dois temas. */
+.linha-section { display: grid; gap: 28px; }
+.linha-heading { display: grid; gap: 14px; }
+.linha-3d { display: grid; grid-template-columns: 72px minmax(0, 1fr) minmax(0, 340px); gap: 20px; align-items: start; }
+@media (max-width: 960px) { .linha-3d { grid-template-columns: minmax(0, 1fr); } .linha-thumbs { order: 2; flex-direction: row !important; justify-content: center; } .linha-info { order: 3; } }
+.linha-thumbs { display: flex; flex-direction: column; gap: 12px; }
+.linha-thumbs button { width: 64px; height: 64px; padding: 0; border-radius: 8px; border: 1px solid var(--line); background: #fff center / cover no-repeat; cursor: pointer; }
+.linha-thumbs button[aria-pressed="true"] { border: 2px solid var(--orange); }
+.linha-palco { position: relative; min-width: 0; border-radius: 16px; overflow: hidden; background: #fff; }
+.linha-palco canvas { display: block; width: 100%; height: min(78svh, 700px); touch-action: pan-y pinch-zoom; cursor: grab; }
+.linha-palco canvas:active { cursor: grabbing; }
+.linha-palco canvas:focus-visible, .linha-thumbs button:focus-visible, .linha-zoom button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.linha-zoom { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: grid; gap: 10px; }
+.linha-zoom button { width: 48px; height: 48px; border: 0; border-radius: 8px; background: #F2F2F0; color: #111; font-size: 26px; cursor: pointer; }
+.linha-info { display: grid; gap: 16px; min-width: 0; }
+.linha-info h3 { margin: 0; font-size: clamp(26px, 3vw, 36px); line-height: 1.1; letter-spacing: -.02em; }
+.linha-info > p { margin: 0; color: var(--muted); }
+.linha-abas { display: inline-flex; width: max-content; gap: 2px; padding: 3px; margin: 0; border: 1px solid var(--line); border-radius: 999px; }
+.linha-abas label { position: relative; padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 14px; color: var(--muted); cursor: pointer; }
+.linha-abas input, .linha-cores input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.linha-abas label:has(:checked) { background: var(--text); color: var(--bg); }
+.linha-cores { border: 0; margin: 0; padding: 0; }
+.linha-cores legend { font-size: 14px; margin-bottom: 10px; padding: 0; }
+.linha-cores > div { display: flex; gap: 12px; }
+.linha-cores label { position: relative; width: 32px; height: 32px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(127, 127, 127, .35); cursor: pointer; }
+.linha-cores label:has(:checked) { outline: 2px solid var(--text); outline-offset: 3px; }
+.linha-abas label:has(:focus-visible), .linha-cores label:has(:focus-visible) { outline: 2px solid var(--orange); outline-offset: 3px; }
+.linha-specs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.linha-specs li { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.linha-specs li span:first-child { color: var(--muted); }
+.linha-specs li span:last-child { text-align: right; }
