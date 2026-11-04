@@ -1877,4 +1877,4 @@ p { text-wrap: pretty; }
 .story-card.card-orange .fruit-symbol { display: none; }
 
 /* Card 02: a garrafa PET em 3D se monta e enche (garrafa-3d.js). Não captura toque, para não brigar com o carrossel. */
-.montagem-art { position: absolute; top: auto; bottom: 8px; right: clamp(8px, 6%, 96px); z-index: -1; width: clamp(150px, 22vw, 260px); height: clamp(230px, 30vw, 340px); pointer-events: none; }
+.montagem-art { position: absolute; top: 50%; bottom: auto; right: clamp(24px, 9%, 140px); transform: translateY(-50%); z-index: -1; width: clamp(140px, 19vw, 230px); height: clamp(220px, 66%, 340px); pointer-events: none; }
