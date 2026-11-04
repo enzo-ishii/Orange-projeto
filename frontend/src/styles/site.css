@@ -918,7 +918,7 @@ p { text-wrap: pretty; }
 .benefit-heading > p { max-width: 420px; margin: 22px 0 0; }
 
 /* Grade aberta de 4 colunas: sem bordas nem divisórias, o respiro separa os itens. */
-.benefit-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 40px; }
+.benefit-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 48px 32px; }
 .benefit-list article { display: flex; flex-direction: column; align-items: flex-start; }
 .benefit-icon {
   height: 52px; width: 52px; margin-bottom: 26px;
@@ -1951,3 +1951,6 @@ button, input, select, textarea { font-family: inherit; }
   .linha-produtos { grid-column: 1; grid-row: 2; }
   .founders-edicao { grid-column: 2; grid-row: 1 / span 2; grid-template-columns: minmax(0, 1fr); max-width: none; margin: 0; padding: 0; gap: 28px; }
 }
+
+/* 5 vantagens: 3 colunas em telas médias */
+@media (min-width: 901px) and (max-width: 1180px) { .benefit-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

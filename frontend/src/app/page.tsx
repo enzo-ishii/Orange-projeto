@@ -394,6 +394,7 @@ export default function Home() {
           <article data-reveal><span className="benefit-icon" data-gesto="volta" aria-hidden="true"><span>↻</span></span><h3>Devolveu, ganhou</h3><p>Devolva sua garrafa e receba cashback conforme as regras do programa.</p></article>
           <article data-reveal><span className="benefit-icon" data-gesto="ritmo" aria-hidden="true"><span>⌁</span></span><h3>Seu ritmo, suas regras</h3><p>Compre quando quiser ou escolha uma assinatura recorrente.</p></article>
           <article data-reveal><span className="benefit-icon" data-gesto="pulsar" aria-hidden="true"><span>◉</span></span><h3>Conectada com você</h3><p>A tecnologia NFC aproxima a garrafa da sua experiência digital.</p></article>
+          <article data-reveal><span className="benefit-icon" data-gesto="girar" aria-hidden="true"><span>✦</span></span><h3>Colágeno hidrolisado</h3><p>No Orange+, o colágeno vem em partes menores: dissolve no suco, o corpo absorve fácil e o sabor não muda.</p></article>
         </div>
       </section>
 
