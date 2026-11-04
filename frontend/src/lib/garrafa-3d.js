@@ -51,7 +51,7 @@ const EIXO_Y = new THREE.Vector3(0, 1, 0);
 const ALTURA_PET = 0.187;    // altura da PET (m): o quadro do vidro é o da PET em escala, para as duas parecerem do mesmo tamanho
 const VAO = 0.035;           // entre os corpos, no modo 'ambas'
 const FRENTE = 0.08;
-const V_AMBAS = 0.45;        // nas duas: cada uma virada para o seu lado (PET à esquerda, vidro à direita), em V
+const V_AMBAS = 0.6;         // nas duas: cada uma virada para o seu lado (PET à esquerda, vidro à direita), em V
 const ZOOM = 0.04;           // nas duas: mouse perto ou toque traz a garrafa um pouco para a frente (a câmera não recua)         // no modo 'ambas', a garrafa pega vem para a frente: gira solta sem esbarrar na vizinha
 const TROCA = 0.9;           // s da troca de modo
 const ATRASO_VIDRO = 0.35;   // s: nas duas juntas, o vidro começa a encher depois da PET
@@ -744,7 +744,7 @@ export function iniciarVitrine(canvas, opcoes = {}) {
       if (ganho > 0) {
         if (!reduzir) st.fase += dt * 2 * Math.PI * g.tipo.freqBalanco * ganho;
         const giro = 2 * Math.atan2(st.q.y, st.q.w);
-        const alvo = POSE + (reduzir ? 0 : cfg.balanco * Math.sin(st.fase + g.tipo.defasagem));
+        const alvo = POSE + (reduzir ? 0 : cfg.balanco * (modo === 'ambas' ? 0.2 : 1) * Math.sin(st.fase + g.tipo.defasagem));   // nas duas, balanço curto: o V não se desfaz
         const d = Math.atan2(Math.sin(alvo - giro), Math.cos(alvo - giro));
         st.w.y += (d * 9 * ganho - st.w.y * 6) * dt;    // mola crítica (~1 s)
       } else st.w.y *= Math.exp(-dt * 2.6);
