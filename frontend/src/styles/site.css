@@ -1929,3 +1929,5 @@ p { text-wrap: pretty; }
 .linha-section { padding-top: clamp(64px, 10vh, 120px); }
 /* Bloco Founders com margem própria e o número alinhado à base do texto. */
 .founders-edicao { max-width: 1200px; margin-inline: auto; padding-inline: max(24px, 6vw); align-items: end; }
+.founders-edicao { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: clamp(32px, 5vw, 80px); align-items: center; }
+.founders-algarismos { font-size: clamp(88px, 10vw, 160px); }

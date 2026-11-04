@@ -20,7 +20,7 @@ function logoCurvo(dst, cor, Lmm, rL, cxPx, cyPx, pxH, pxV) {
   }
 }
 export const CORES = {
-  preto: { nome: 'Preto', base: '#151515', rug: .4, metal: 0, coat: .35, logo: '#D2D4D6', lr: .28, lm: 1 },
+  preto: { nome: 'Preto', base: '#151515', rug: .4, metal: 0, coat: .35, logo: '#E6E8EA', lr: .26, lm: .6 },
   prata: { nome: 'Prata', base: '#C9CDD1', rug: .3, metal: 1, coat: 0, logo: '#262728', lr: .55, lm: .2, escovado: true },
   osso: { nome: 'Osso', base: '#EAE3D6', rug: .25, metal: 0, coat: 1, logo: '#6E7276', lr: .3, lm: .6 },
   laranja: { nome: 'Laranja-sangue', base: '#B8400D', rug: .24, metal: 0, coat: 1, logo: '#F0F1F2', lr: .28, lm: .5 },
