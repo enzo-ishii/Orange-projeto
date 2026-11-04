@@ -1903,3 +1903,7 @@ p { text-wrap: pretty; }
 /* Logo da Orange no canto dos cards, no lugar do número. */
 .card-logo { position: absolute; top: 26px; left: 26px; width: 36px; height: 36px; color: currentColor; }
 .story-card.card-orange .card-logo, .story-card.card-cream .card-logo { color: #f5f3ed; }
+
+/* Carrossel dos cards: o dedo arrasta para os lados (o navegador fica com a rolagem vertical) e o gesto lateral do trackpad não volta a página. */
+.story-cards.is-carousel { overscroll-behavior-x: contain; }
+.story-cards.is-carousel .story-card { touch-action: pan-y; }

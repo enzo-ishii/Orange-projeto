@@ -203,6 +203,18 @@ export default function Home() {
   };
   const proximoCard = (deX = 0) => trocarCard((activeCard + 1) % storyCards.length, -1, deX);
   const cardAnterior = (deX = 0) => trocarCard((activeCard - 1 + storyCards.length) % storyCards.length, 1, deX);
+  // Trackpad: deslizar dois dedos para o lado troca o card (soma o movimento lateral e espera um pouco entre trocas).
+  const giroRef = useRef({ soma: 0, ultimo: 0, ate: 0 });
+  const rolarCards = (e: { deltaX: number; deltaY: number }) => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    const g = giroRef.current, agora = performance.now();
+    if (agora < g.ate) return;
+    if (agora - g.ultimo > 250) g.soma = 0;
+    g.ultimo = agora; g.soma += e.deltaX;
+    if (Math.abs(g.soma) < 60) return;
+    if (g.soma > 0) proximoCard(); else cardAnterior();
+    g.soma = 0; g.ate = agora + 650;
+  };
 
   const comecarArrasto = (e: ReactPointerEvent<HTMLElement>) => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
@@ -332,7 +344,7 @@ export default function Home() {
         <div className="story-grid">
           <h2 data-reveal>Não é só suco.<br /><span>É sentir o agora.</span></h2>
         </div>
-        <div className="story-cards is-carousel" data-reveal>
+        <div className="story-cards is-carousel" data-reveal onWheel={rolarCards}>
           <StoryCardView key={currentCard.number} card={currentCard} aria-live="polite" onPointerDown={comecarArrasto} onPointerMove={moverArrasto} onPointerUp={soltarArrasto} onPointerCancel={soltarArrasto} />
           {cardsSaindo.map((saindo) => (
             <StoryCardView
