@@ -1877,7 +1877,18 @@ p { text-wrap: pretty; }
 .story-card.card-orange .fruit-symbol { display: none; }
 
 /* Card 02: a garrafa PET em 3D se monta e enche (garrafa-3d.js). Não captura toque, para não brigar com o carrossel. */
-.montagem-art { position: absolute; top: 50%; bottom: auto; right: clamp(24px, 9%, 140px); transform: translateY(-50%); z-index: -1; width: clamp(140px, 19vw, 230px); height: clamp(220px, 66%, 340px); pointer-events: none; }
+/* Card 02 em grid: texto na coluna da esquerda, a garrafa ocupa e centraliza a da direita (sem posição absoluta). */
+.story-card:has(> .montagem-art) { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); grid-template-rows: auto 1fr auto auto auto; column-gap: clamp(16px, 4vw, 56px); }
+.story-card:has(> .montagem-art) > :not(.montagem-art) { grid-column: 1; }
+.story-card:has(> .montagem-art) > .card-number { grid-row: 1; justify-self: start; }
+.story-card:has(> .montagem-art) > h3 { grid-row: 3; }
+.story-card:has(> .montagem-art) > p { grid-row: 4; }
+.story-card:has(> .montagem-art) > .card-caption { grid-row: 5; }
+.montagem-art { grid-column: 2; grid-row: 1 / -1; align-self: center; justify-self: center; width: 100%; height: min(100%, 440px); min-height: 280px; pointer-events: none; }
+@media (max-width: 720px) {
+  .story-card:has(> .montagem-art) { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto auto; }
+  .montagem-art { grid-column: 1; grid-row: 2; height: 240px; min-height: 0; }
+}
 
 /* Card 03 com a foto da corrida no parque; véu escuro embaixo e à esquerda, texto claro por cima. */
 .story-card.card-cream {
@@ -1888,3 +1899,7 @@ p { text-wrap: pretty; }
 }
 .story-card.card-cream h3, .story-card.card-cream p, .story-card.card-cream .card-caption, .story-card.card-cream .card-number { color: #f5f3ed; border-color: rgba(245, 243, 237, .45); }
 .story-card.card-cream .spark-art { display: none; }
+
+/* Logo da Orange no canto dos cards, no lugar do número. */
+.card-logo { position: absolute; top: 26px; left: 26px; width: 36px; height: 36px; color: currentColor; }
+.story-card.card-orange .card-logo, .story-card.card-cream .card-logo, .story-card.card-dark .card-logo { color: #f5f3ed; }
