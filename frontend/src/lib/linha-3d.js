@@ -2,17 +2,18 @@
 // No React, importe com dynamic(..., { ssr: false }): o WebGL só existe no navegador.
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { LOGO_LARGURA, LOGO_PATHS } from './logo-orange.js';
 const mm = (v) => v / 1000;
 const tela = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
 const orm = (r, m) => `rgb(0,${Math.round(r * 255)},${Math.round(m * 255)})`;
-function logo(k, x, y, s, cor, s2 = s) { k.save(); k.translate(x, y); k.scale(s / 200, s2 / 200); k.strokeStyle = cor; k.fillStyle = cor; k.lineWidth = 20; k.lineCap = 'round';
-  k.beginPath(); k.arc(100, 115, 68, -37.5 * Math.PI / 180, 277.5 * Math.PI / 180); k.stroke(); k.beginPath(); k.moveTo(122, 70); k.lineTo(130, 50); k.stroke();
-  k.fill(new Path2D('M128,50 Q150,10 195,22 Q175,62 128,50 Z')); k.restore(); }
+// Logo oficial (lib/logo-orange.js): caixa de largura s; a altura segue a proporção do logo (s2 estica na vertical).
+const LOGO_P2D = LOGO_PATHS.map((d) => new Path2D(d));
+function logo(k, x, y, s, cor, s2 = s) { k.save(); k.translate(x, y); k.scale(s / LOGO_LARGURA, s2 / LOGO_LARGURA); k.fillStyle = cor; LOGO_P2D.forEach((p) => k.fill(p)); k.restore(); }
 function rnd(s) { return () => (s = (s * 16807) % 2147483647) / 2147483647; }
 /* Logo na superfície curva: cada coluna é posta onde ela aparece vista de frente, então o logo não afina nas bordas. */
 function logoCurvo(dst, cor, Lmm, rL, cxPx, cyPx, pxH, pxV) {
-  const o = tela(Math.ceil(Lmm * pxV), Math.ceil(Lmm * pxV)); logo(o.getContext('2d'), 0, 0, Lmm * pxV, cor);
-  const half = Lmm / 2, sMax = rL * Math.asin(Math.min(.999, half / rL)), top = cyPx - Lmm * pxV * .58;
+  const o = tela(Math.ceil(Lmm * pxV), Math.ceil(Lmm * pxV * 1.25)); logo(o.getContext('2d'), 0, 0, Lmm * pxV, cor);
+  const half = Lmm / 2, sMax = rL * Math.asin(Math.min(.999, half / rL)), top = cyPx - Lmm * pxV * .62;
   for (let dx = Math.floor(-sMax * pxH); dx <= Math.ceil(sMax * pxH); dx++) {
     const sx = (rL * Math.sin(dx / pxH / rL) + half) * pxV;
     if (sx >= 0 && sx < o.width) dst.drawImage(o, sx, 0, 1, o.height, cxPx + dx, top, 1, o.height);
@@ -117,7 +118,7 @@ function aplicarCor(c) {
   logoCurvo(a, C.logo, P.logo, rL, W / 2, cy, pxH, pxV); logoCurvo(b, orm(C.lr, C.lm), P.logo, rL, W / 2, cy, pxH, pxV);
   // número da Founders Edition, pequeno, logo abaixo do logo
   if (numero) {
-    const fs = Math.round(4.6 * pxV), y = cy + P.logo * pxV * .64, txt = 'Nº ' + String(numero).padStart(4, '0');
+    const fs = Math.round(4.6 * pxV), y = cy + P.logo * pxV * .82, txt = 'Nº ' + String(numero).padStart(4, '0');
     for (const [k, c] of [[a, C.logo], [b, orm(C.lr, C.lm)]]) {
       k.save(); k.scale(pxH / pxV, 1); k.fillStyle = c; k.font = `600 ${fs}px "DM Sans", Arial, sans-serif`; k.textAlign = 'center';
       if ('letterSpacing' in k) k.letterSpacing = Math.round(fs * .14) + 'px';

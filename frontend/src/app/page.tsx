@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Menu, Moon, Sun, X, Sparkles } from "lucide-react";
 import StaggerTestimonials from "@/components/orange/StaggerTestimonials";
 import LogoAnimada from "@/components/orange/LogoAnimada";
+import LogoOrange from "@/components/orange/LogoOrange";
 import WebMcpTools from "@/components/webmcp-tools";
 import { useRevelarAoRolar } from "@/lib/use-revelar-ao-rolar";
 import { useInclinacao3D } from "@/lib/use-inclinacao-3d";
@@ -478,11 +479,7 @@ export default function Home() {
 function StoryCardView({ card, className = "", ...resto }: { card: StoryCard } & HTMLAttributes<HTMLElement>) {
   return (
     <article className={`story-card ${card.style} ${className}`} {...resto}>
-      <svg className="card-logo" viewBox="0 0 200 200" aria-hidden="true">
-        <circle cx="100" cy="115" r="68" fill="none" stroke="currentColor" strokeWidth="20" strokeLinecap="round" strokeDasharray="373.9 53.4" transform="rotate(-37.5 100 115)" />
-        <line x1="122" y1="70" x2="130" y2="50" stroke="currentColor" strokeWidth="20" strokeLinecap="round" />
-        <path d="M128,50 Q150,10 195,22 Q175,62 128,50 Z" fill="currentColor" />
-      </svg>
+      <LogoOrange className="card-logo" />
       {card.artType === "montagem" ? <GarrafaMontagem /> : <div className={artClass[card.artType]} aria-hidden="true">{card.artText}</div>}
       <h3>{card.title}</h3>
       <p>{card.description}</p>
