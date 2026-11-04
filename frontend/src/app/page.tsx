@@ -316,6 +316,16 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Linha Orange: copo e garrafa térmicos em 3D, como página de produto. */}
+      <section className="linha-section section-shell" id="linha">
+        <div className="linha-heading">
+          <div className="section-kicker" data-reveal>FOUNDERS EDITION / COPO E GARRAFA</div>
+          <h2 data-reveal>Gelado o dia todo.<br /><span>Com a sua cara.</span></h2>
+        </div>
+        <LinhaShowcase />
+        <p className="plan-note" data-reveal>* Edição em preparação. Condições e prazos serão enviados primeiro para a lista de espera.</p>
+      </section>
+
       {/* Seção de conceito: explica a proposta da marca em três ideias simples. */}
       <section className="story section-shell" id="conceito">
         <div className="section-kicker" data-reveal>01 / A EXPERIÊNCIA</div>
@@ -401,16 +411,6 @@ export default function Home() {
           ))}
         </div>
         <p className="plan-note" data-reveal>* Preços fictícios, usados apenas como exemplo visual. Não representam uma oferta comercial real.</p>
-      </section>
-
-      {/* Linha Orange: copo e garrafa térmicos em 3D, como página de produto. */}
-      <section className="linha-section section-shell" id="linha">
-        <div className="linha-heading">
-          <div className="section-kicker" data-reveal>LINHA ORANGE / COPO E GARRAFA</div>
-          <h2 data-reveal>Gelado o dia todo.<br /><span>Com a sua cara.</span></h2>
-        </div>
-        <LinhaShowcase />
-        <p className="plan-note" data-reveal>* Modelos em estudo. Medidas, materiais e preços ainda serão definidos.</p>
       </section>
 
       {/* Avaliações em cartões sobrepostos com navegação por setas e indicadores. */}

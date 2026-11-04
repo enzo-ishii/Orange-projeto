@@ -40,9 +40,9 @@ export const PRODUTOS = {
 
 /** Monta a vitrine 3D no canvas. opcoes: produto, cor, aoMiniaturas(lista de imagens), aoMudarAngulo(i). */
 export function iniciarLinha(canvas, opcoes = {}) {
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2)); renderer.toneMapping = THREE.NeutralToneMapping; renderer.outputColorSpace = THREE.SRGBColorSpace;
-const scene = new THREE.Scene(); scene.background = new THREE.Color('#FFFFFF');
+const scene = new THREE.Scene();
 { const s = new THREE.Scene(); s.add(new THREE.Mesh(new THREE.BoxGeometry(8, 6, 8), new THREE.MeshBasicMaterial({ color: '#202020', side: THREE.BackSide })));
   const p = (w, h, k, pos) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color('#FFF').multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(...pos); m.lookAt(0, .3, 0); s.add(m); };
   p(.5, 3, 7, [-1.5, .7, .5]); p(.4, 2.6, 4, [1.4, .6, .8]); p(2, 2, 2.5, [0, 2.6, .2]); p(1.4, .7, 1.2, [0, .3, 2.2]);
@@ -136,7 +136,7 @@ const tamanho = () => { const w = canvas.clientWidth, h = canvas.clientHeight, p
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function montarMiniaturas() {
   tamanho(); const lista = [];
-  PRODUTOS[prod].angulos.forEach((a, i) => { irPara(i, true); ctl.update(); renderer.render(scene, cam); let img = ''; try { img = canvas.toDataURL('image/jpeg', .8); } catch (e) {} lista.push({ nome: a[0], img }); });
+  PRODUTOS[prod].angulos.forEach((a, i) => { irPara(i, true); ctl.update(); renderer.render(scene, cam); let img = ''; try { img = canvas.toDataURL('image/png'); } catch (e) {} lista.push({ nome: a[0], img }); });
   irPara(0, true); opcoes.aoMiniaturas?.(lista);
 }
 let raf = 0;
