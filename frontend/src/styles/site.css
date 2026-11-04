@@ -1902,4 +1902,4 @@ p { text-wrap: pretty; }
 
 /* Logo da Orange no canto dos cards, no lugar do número. */
 .card-logo { position: absolute; top: 26px; left: 26px; width: 36px; height: 36px; color: currentColor; }
-.story-card.card-orange .card-logo, .story-card.card-cream .card-logo, .story-card.card-dark .card-logo { color: #f5f3ed; }
+.story-card.card-orange .card-logo, .story-card.card-cream .card-logo { color: #f5f3ed; }
