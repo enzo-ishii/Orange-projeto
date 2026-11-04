@@ -1876,26 +1876,5 @@ p { text-wrap: pretty; }
 }
 .story-card.card-orange .fruit-symbol { display: none; }
 
-/* Card 02: a garrafa se monta peça por peça, em loop de 7s. Só transform, opacity e traço. */
-.montagem-art { position: absolute; top: 28px; right: clamp(16px, 8%, 120px); z-index: -1; width: clamp(104px, 15vw, 168px); height: auto; overflow: visible; }
-.montagem-art .mt-corpo { fill: #151515; stroke: #3a3633; stroke-width: 1.5; }
-.montagem-art .mt-aro { fill: #b9bdc1; }
-.montagem-art .mt-tampa, .montagem-art .mt-aba { fill: #1c1c1c; stroke: #3a3633; stroke-width: 1.2; }
-.montagem-art .mt-alca { fill: none; stroke: #2a2826; stroke-width: 7; stroke-linecap: round; }
-.montagem-art .mt-logo path { fill: none; stroke: #f2f3f4; stroke-width: 20; stroke-linecap: round; }
-.montagem-art .mt-logo .mt-folha { fill: #f2f3f4; stroke: none; }
-@media (prefers-reduced-motion: no-preference) {
-  .montagem-art * { transform-box: fill-box; transform-origin: center; }
-  .montagem-art .mt-corpo { animation: mt-corpo 7s cubic-bezier(.2, .8, .2, 1) infinite; }
-  .montagem-art .mt-aro { animation: mt-aro 7s cubic-bezier(.2, .8, .2, 1) infinite; }
-  .montagem-art .mt-tampa, .montagem-art .mt-aba { animation: mt-tampa 7s cubic-bezier(.2, .8, .2, 1) infinite; }
-  .montagem-art .mt-alca { stroke-dasharray: 1; animation: mt-alca 7s ease-in-out infinite; }
-  .montagem-art .mt-logo path { stroke-dasharray: 1; animation: mt-traco 7s ease-in-out infinite; }
-  .montagem-art .mt-logo .mt-folha { animation: mt-folha 7s ease-in-out infinite; }
-}
-@keyframes mt-corpo { 0% { opacity: 0; transform: translateY(40px); } 14%, 90% { opacity: 1; transform: none; } 100% { opacity: 0; } }
-@keyframes mt-aro { 0%, 14% { opacity: 0; transform: translateY(-70px); } 28%, 90% { opacity: 1; transform: none; } 100% { opacity: 0; } }
-@keyframes mt-tampa { 0%, 28% { opacity: 0; transform: translateY(-90px); } 42%, 90% { opacity: 1; transform: none; } 100% { opacity: 0; } }
-@keyframes mt-alca { 0%, 42% { opacity: 0; stroke-dashoffset: 1; } 44% { opacity: 1; } 56%, 90% { opacity: 1; stroke-dashoffset: 0; } 100% { opacity: 0; stroke-dashoffset: 0; } }
-@keyframes mt-traco { 0%, 56% { stroke-dashoffset: 1; opacity: 1; } 76%, 90% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
-@keyframes mt-folha { 0%, 72% { opacity: 0; } 78%, 90% { opacity: 1; } 100% { opacity: 0; } }
+/* Card 02: a garrafa PET em 3D se monta e enche (garrafa-3d.js). Não captura toque, para não brigar com o carrossel. */
+.montagem-art { position: absolute; top: 12px; right: clamp(8px, 6%, 96px); z-index: -1; width: clamp(150px, 22vw, 260px); height: clamp(230px, 30vw, 340px); pointer-events: none; }

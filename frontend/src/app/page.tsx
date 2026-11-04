@@ -15,6 +15,8 @@ import { useBotoesMagneticos } from "@/lib/use-botoes-magneticos";
 // Garrafa 3D só no navegador (WebGL). Enquanto carrega, o espaço fica vazio e a entrada enche a garrafa.
 const GarrafaHero = dynamic(() => import("@/components/orange/GarrafaHero"), { ssr: false });
 // Copo e garrafa da Linha Orange em 3D (também só no navegador).
+// Garrafa PET se montando no card 02 (WebGL, só no navegador).
+const GarrafaMontagem = dynamic(() => import("@/components/orange/GarrafaMontagem"), { ssr: false });
 const LinhaShowcase = dynamic(() => import("@/components/orange/LinhaShowcase"), { ssr: false });
 
 // Os valores são fictícios e servem somente como exemplo visual.
@@ -482,24 +484,6 @@ function StoryCardView({ card, className = "", ...resto }: { card: StoryCard } &
       <p>{card.description}</p>
       <span className="card-caption">{card.caption}</span>
     </article>
-  );
-}
-
-// A garrafa se montando peça por peça: corpo, aro de aço, tampa, alça e o logo gravado. Repete em loop.
-function GarrafaMontagem() {
-  return (
-    <svg className="montagem-art" viewBox="0 0 160 300" aria-hidden="true">
-      <rect className="mt-corpo" x="50" y="96" width="60" height="190" rx="14" />
-      <rect className="mt-aro" x="48" y="80" width="64" height="18" rx="3" />
-      <rect className="mt-tampa" x="49" y="64" width="62" height="17" rx="6" />
-      <rect className="mt-aba" x="68" y="58" width="24" height="7" rx="3" />
-      <path className="mt-alca" d="M47 89 C 30 140, 130 140, 113 89" pathLength="1" />
-      <g className="mt-logo" transform="translate(57 150) scale(.23)">
-        <path d="M153.9 73.6 A68 68 0 1 1 108.9 47.6" pathLength="1" />
-        <path d="M122 70 L130 50" pathLength="1" />
-        <path className="mt-folha" d="M128,50 Q150,10 195,22 Q175,62 128,50 Z" />
-      </g>
-    </svg>
   );
 }
 
