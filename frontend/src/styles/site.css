@@ -1941,3 +1941,13 @@ h1, h2, h3, h4 { font-family: 'Archivo Black', 'Arial Black', sans-serif; font-w
 h1 span, h2 span { font-family: 'Fraunces', Georgia, serif; font-weight: 900; }
 .section-kicker, .eyebrow, .card-caption { font-family: 'DM Mono', ui-monospace, monospace; text-transform: uppercase; }
 button, input, select, textarea { font-family: inherit; }
+
+/* Founders Edition lado a lado: produto menor à esquerda, número e texto à direita. */
+.linha-intro { margin: 0; max-width: 58ch; font-size: 18px; line-height: 1.55; color: var(--text); }
+.linha-palco canvas { height: min(62svh, 560px); }
+@media (min-width: 900px) {
+  .linha-3d { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; justify-items: stretch; column-gap: clamp(32px, 5vw, 80px); }
+  .linha-palco { grid-column: 1; grid-row: 1; }
+  .linha-produtos { grid-column: 1; grid-row: 2; }
+  .founders-edicao { grid-column: 2; grid-row: 1 / span 2; grid-template-columns: minmax(0, 1fr); max-width: none; margin: 0; padding: 0; gap: 28px; }
+}

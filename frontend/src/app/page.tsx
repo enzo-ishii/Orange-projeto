@@ -332,6 +332,7 @@ export default function Home() {
       <section className="linha-section section-shell" id="linha">
         <div className="linha-heading">
           <h2 data-reveal>Founders Edition</h2>
+          <p className="linha-intro" data-reveal>Para os primeiros 1.000 apoiadores, a Orange preparou uma homenagem: um kit especial e uma licença com preço congelado para sempre. Um kit que nunca mais vai voltar.</p>
         </div>
         <LinhaShowcase />
         <p className="plan-note" data-reveal>* Edição em preparação. Condições e prazos serão enviados primeiro para a lista de espera.</p>
