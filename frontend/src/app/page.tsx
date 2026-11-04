@@ -22,9 +22,9 @@ const LinhaShowcase = dynamic(() => import("@/components/orange/LinhaShowcase"),
 
 // Os valores são fictícios e servem somente como exemplo visual.
 const plans = [
-  { name: "Solo", amount: "R$ 9,90", detail: "por garrafa", description: "Pra matar a sede de um jeito melhor.", perks: ["Suco 100% natural", "Laranja de verdade", "Embalagem retornável"], featured: false },
-  { name: "Orange Club", amount: "R$ 34,90", detail: "/ mês", description: "Sua dose de frescor, sem complicação.", perks: ["4 garrafas por mês", "Cashback na devolução", "Acesso a edições especiais"], featured: true },
-  { name: "Orange+", amount: "R$ 44,90", detail: "/ mês", description: "Mais cuidado na sua rotina.", perks: ["4 garrafas enriquecidas com colágeno", "Cashback na devolução", "Entrega recorrente"], featured: false },
+  { name: "Gominho", amount: "R$ 19,90", detail: "/ mês", description: "Pra começar no ritmo da laranja.", perks: ["2 sucos por mês", "15% de cashback", "Suco 100% natural"], featured: false },
+  { name: "Citrus", amount: "R$ 39,90", detail: "/ mês", description: "Frescor toda semana, sem pensar.", perks: ["Até 7 refis por mês", "15% de cashback nas compras", "Garrafa retornável"], featured: true },
+  { name: "Orange+", amount: "R$ 49,90", detail: "/ mês", description: "O máximo de Orange na sua rotina.", perks: ["Até 11 refis por mês", "15% de cashback nas compras", "Garrafa retornável"], featured: false },
 ];
 
 type StoryCard = {
@@ -413,8 +413,6 @@ export default function Home() {
               <div className="plan-topline"><span>{plan.name}</span><span>0{index + 1}</span></div>
               <p className="plan-description">{plan.description}</p>
               <div className="plan-price"><span data-count>{plan.amount}</span><small>{plan.detail}</small></div>
-              {/* No fluxo do card (não mais absoluto), para nunca ficar por cima do número do plano. */}
-              <span className="plan-fictional">Valor fictício</span>
               <div className="plan-divider" />
               <ul>{plan.perks.map((perk) => <li key={perk}><Check size={15} aria-hidden="true" />{perk}</li>)}</ul>
               <a className={plan.featured ? "button button-dark plan-button" : "button button-outline plan-button"} href={`mailto:oi@orange.com.br?subject=${encodeURIComponent(`Quero conhecer o plano ${plan.name}`)}`}>
@@ -423,7 +421,6 @@ export default function Home() {
             </article>
           ))}
         </div>
-        <p className="plan-note" data-reveal>* Preços fictícios, usados apenas como exemplo visual. Não representam uma oferta comercial real.</p>
       </section>
 
       {/* Avaliações em cartões sobrepostos com navegação por setas e indicadores. */}

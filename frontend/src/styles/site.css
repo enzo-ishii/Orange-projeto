@@ -952,7 +952,7 @@ p { text-wrap: pretty; }
 
 .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 55px; align-items: stretch; }
 .plan-section .plans-grid {
-  width: min(740px, 100%);
+  width: min(980px, 100%);
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 13px;
   margin: 55px auto 0;
@@ -1954,3 +1954,8 @@ button, input, select, textarea { font-family: inherit; }
 
 /* 5 vantagens: 3 colunas em telas médias */
 @media (min-width: 901px) and (max-width: 1180px) { .benefit-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* Planos: preço e "/ mês" na mesma linha, botão sem quebrar */
+.plan-price { display: flex; align-items: baseline; flex-wrap: nowrap; white-space: nowrap; }
+.plan-card.featured .plan-price { font-size: clamp(34px, 3.4vw, 44px); }
+.plan-button { white-space: nowrap; }
