@@ -1923,3 +1923,7 @@ p { text-wrap: pretty; }
 .founders-texto > p { font-size: 20px; }
 .founders-acao.button { min-height: 56px; padding: 0 30px; display: inline-flex; align-items: center; border-radius: 999px; background: var(--orange); color: #111; border: 0; }
 .linha-section > .plan-note { margin-top: 32px; }
+/* Número da edição numa linha só, com o total menor e apagado. */
+.founders-algarismos { display: flex; align-items: baseline; gap: .12em; white-space: nowrap; font-size: clamp(96px, 13vw, 200px); }
+.founders-total { font-size: .25em; opacity: .35; margin-left: 0; }
+.linha-section { padding-top: clamp(64px, 10vh, 120px); }
