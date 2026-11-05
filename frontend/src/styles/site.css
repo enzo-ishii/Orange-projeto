@@ -2015,7 +2015,21 @@ button, input, select, textarea { font-family: inherit; }
 /* Pé de laranja da seção da causa: cresce, floresce e dá fruto ao aparecer */
 .causa-topo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 340px); align-items: end; gap: 40px; margin-bottom: 64px; }
 .causa-topo .benefit-heading { margin-bottom: 0; }
-.pe-laranja svg { display: block; width: 100%; height: auto; overflow: visible; }
+.pe-laranja { position: relative; aspect-ratio: 300 / 340; }
+.pe-cena { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transform: scale(.96); transition: opacity .6s ease, transform .6s ease; }
+.pe-cena.ativa { opacity: 1; transform: none; }
+.pe-cena svg { display: block; width: 100%; height: auto; overflow: visible; }
+.pe-cena-logo svg { width: auto; color: var(--text); }
+.pe-maos { fill: none; stroke: color-mix(in srgb, var(--text) 55%, transparent); stroke-width: 5; stroke-linecap: round; }
+.pe-laranjinha circle { fill: var(--orange); }
+.pe-laranjinha path { fill: #4f8f45; }
+@media (prefers-reduced-motion: no-preference) {
+  .pe-familia > g { animation: pe-pessoa .7s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(.15s + var(--i) * .16s); }
+  .pe-maos { stroke-dasharray: 90; animation: pe-traco .6s ease-out .8s both; }
+  .pe-laranjinha { transform-origin: 150px 268px; animation: pe-brota .6s cubic-bezier(.3, 1.6, .5, 1) 1.1s both; }
+}
+@keyframes pe-pessoa { from { transform: translateY(30px) scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes pe-traco { from { stroke-dashoffset: 90; } to { stroke-dashoffset: 0; } }
 .pe-chao { fill: color-mix(in srgb, var(--text) 10%, transparent); }
 .pe-tronco { fill: none; stroke: #7a4a26; stroke-width: 9; stroke-linecap: round; stroke-dasharray: 260; stroke-dashoffset: 0; }
 .pe-copa circle { fill: #3e7a3a; }
@@ -2028,16 +2042,16 @@ button, input, select, textarea { font-family: inherit; }
 .pe-frutos path { fill: #4f8f45; }
 .pe-copa { transform-origin: 150px 318px; }
 @media (prefers-reduced-motion: no-preference) {
-  .pe-laranja:not(.is-revealed) .pe-tronco { stroke-dashoffset: 260; }
-  .pe-laranja:not(.is-revealed) .pe-copa circle,
-  .pe-laranja:not(.is-revealed) .pe-flores > g,
-  .pe-laranja:not(.is-revealed) .pe-frutos > g { transform: scale(0); }
-  .pe-laranja.is-revealed .pe-tronco { animation: pe-tronco 1.1s cubic-bezier(.3, .7, .3, 1) both; }
-  .pe-laranja.is-revealed .pe-copa circle { animation: pe-brota .7s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(.8s + var(--i) * .08s); }
+  .pe-arvore:not(.cresce) .pe-tronco { stroke-dashoffset: 260; }
+  .pe-arvore:not(.cresce) .pe-copa circle,
+  .pe-arvore:not(.cresce) .pe-flores > g,
+  .pe-arvore:not(.cresce) .pe-frutos > g { transform: scale(0); }
+  .pe-arvore.cresce .pe-tronco { animation: pe-tronco 1.1s cubic-bezier(.3, .7, .3, 1) both; }
+  .pe-arvore.cresce .pe-copa circle { animation: pe-brota .7s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(.8s + var(--i) * .08s); }
   /* flores abrem e fecham; no lugar delas, as laranjas crescem */
-  .pe-laranja.is-revealed .pe-flores > g { animation: pe-flor 2.2s ease-in-out both; animation-delay: calc(1.5s + var(--i) * .12s); }
-  .pe-laranja.is-revealed .pe-frutos > g { animation: pe-brota .8s cubic-bezier(.3, 1.6, .5, 1) both; animation-delay: calc(2.6s + var(--i) * .15s); }
-  .pe-laranja.is-revealed .pe-copa { animation: pe-vento 6s ease-in-out 3.6s infinite; }
+  .pe-arvore.cresce .pe-flores > g { animation: pe-flor 2.2s ease-in-out both; animation-delay: calc(1.5s + var(--i) * .12s); }
+  .pe-arvore.cresce .pe-frutos > g { animation: pe-brota .8s cubic-bezier(.3, 1.6, .5, 1) both; animation-delay: calc(2.6s + var(--i) * .15s); }
+  .pe-arvore.cresce .pe-copa { animation: pe-vento 6s ease-in-out 3.6s infinite; }
 }
 @keyframes pe-tronco { from { stroke-dashoffset: 260; } to { stroke-dashoffset: 0; } }
 @keyframes pe-brota { from { transform: scale(0); } to { transform: scale(1); } }
