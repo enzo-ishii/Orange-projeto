@@ -100,6 +100,8 @@ export function SignInPage({ initialMfaRequired = false, oauthError = "" }: { in
             <button type="button" className={styles.backLink} onClick={() => { setMfaRequired(false); setNotice(""); }}>Voltar ao login</button>
           </form>
         ) : (
+          <>
+          <SocialLoginButtons />
           <form onSubmit={handleSubmit} className={styles.form}>
             <label htmlFor="email">E-mail</label>
             <input id="email" name="email" type="email" placeholder="voce@exemplo.com" autoComplete="username" maxLength={254} required />
@@ -109,8 +111,8 @@ export function SignInPage({ initialMfaRequired = false, oauthError = "" }: { in
             <button type="submit" className={styles.loginButton} disabled={submitting}>{submitting ? "Entrando…" : "Entrar"}</button>
             {notice && <p className={styles.error} role="alert">{notice}</p>}
           </form>
+          </>
         )}
-        {!mfaRequired && <SocialLoginButtons />}
         {!mfaRequired && <div className={styles.footer}>
           <p>Ainda não tem conta? <a className={styles.inlineLink} href="/cadastro">Criar conta</a></p>
         </div>}

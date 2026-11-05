@@ -80,6 +80,7 @@ export function AccountForm({ mode, token = "" }: { mode: Mode; token?: string }
   return (
     <AuthFrame mode={mode === "register" ? "register" : "login"} showModeSwitch={mode !== "reset"}>
         <div className={styles.header}><span className={styles.tag}>{content.tag}</span><h1>{content.title}</h1><p>{content.description}</p></div>
+        {mode === "register" && !complete && <SocialLoginButtons mode="register" />}
         {resetTokenMissing ? <p className={styles.error} role="alert">Este link está incompleto. Peça uma nova recuperação de senha.</p> : !complete ? (
           <form onSubmit={handleSubmit} className={styles.form}>
             {mode === "register" && <><label htmlFor="name">Nome</label><input id="name" name="name" type="text" placeholder="Seu nome" autoComplete="name" minLength={2} maxLength={120} required /></>}
@@ -90,7 +91,6 @@ export function AccountForm({ mode, token = "" }: { mode: Mode; token?: string }
             {error && <p className={styles.error} role="alert">{error}</p>}
           </form>
         ) : <p className={styles.message} role="status">{notice}</p>}
-        {mode === "register" && !complete && <SocialLoginButtons mode="register" />}
         <div className={styles.footer}>
           {mode === "register" ? <p>Já tem uma conta? <a className={styles.inlineLink} href="/login">Entrar</a></p> : <p><a className={styles.inlineLink} href="/login">Voltar para o login</a></p>}
         </div>
