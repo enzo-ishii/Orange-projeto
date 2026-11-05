@@ -21,6 +21,11 @@ export function AccountForm({ mode, token = "" }: { mode: Mode; token?: string }
   const [submitting, setSubmitting] = useState(false);
   const [complete, setComplete] = useState(false);
   const [passwordResetEnabled, setPasswordResetEnabled] = useState<boolean | null>(null);
+  // cadastro em etapas: nome, depois e-mail, depois senha (um campo por vez)
+  const [etapa, setEtapa] = useState(0);
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const primeiroNome = nome.trim().split(/\s+/)[0] ?? "";
 
   useEffect(() => {
     if (mode !== "forgot") return;
@@ -36,6 +41,7 @@ export function AccountForm({ mode, token = "" }: { mode: Mode; token?: string }
     event.preventDefault();
     setNotice("");
     setError("");
+    if (mode === "register" && etapa < 2) { setEtapa(etapa + 1); return; }
     setSubmitting(true);
     const form = new FormData(event.currentTarget);
     const password = String(form.get("password") ?? "");
@@ -46,7 +52,7 @@ export function AccountForm({ mode, token = "" }: { mode: Mode; token?: string }
     }
 
     const request = mode === "register"
-      ? { url: "/api/auth/register", body: { name: form.get("name"), email: form.get("email"), password } }
+      ? { url: "/api/auth/register", body: { name: nome.trim(), email: email.trim(), password } }
       : mode === "forgot"
         ? { url: "/api/auth/password/forgot", body: { email: form.get("email") } }
         : { url: "/api/auth/password/reset", body: { token, password } };
@@ -74,20 +80,28 @@ export function AccountForm({ mode, token = "" }: { mode: Mode; token?: string }
     }
   }
 
-  const content = copy[mode];
+  const ETAPAS = [
+    { title: "Como podemos te chamar?", description: "Comece pelo seu nome." },
+    { title: `Olá, ${primeiroNome}!`, description: "Agora, qual é o seu e-mail?" },
+    { title: "Agora, sua senha.", description: "Use pelo menos 12 caracteres." },
+  ];
+  const content = mode === "register" && !complete ? { ...copy.register, ...ETAPAS[etapa] } : copy[mode];
   const resetTokenMissing = mode === "reset" && !token;
 
   return (
     <AuthFrame mode={mode === "register" ? "register" : "login"} showModeSwitch={mode !== "reset"}>
-        <div className={styles.header}><span className={styles.tag}>{content.tag}</span><h1>{content.title}</h1><p>{content.description}</p></div>
-        {mode === "register" && !complete && <SocialLoginButtons mode="register" />}
+        <div key={mode === "register" ? etapa : mode} className={`${styles.header} ${styles.etapa}`}><span className={styles.tag}>{content.tag}</span><h1>{content.title}</h1><p>{content.description}</p></div>
+        {mode === "register" && !complete && etapa === 0 && <SocialLoginButtons mode="register" />}
         {resetTokenMissing ? <p className={styles.error} role="alert">Este link está incompleto. Peça uma nova recuperação de senha.</p> : !complete ? (
           <form onSubmit={handleSubmit} className={styles.form}>
-            {mode === "register" && <><label htmlFor="name">Nome</label><input id="name" name="name" type="text" placeholder="Seu nome" autoComplete="name" minLength={2} maxLength={120} required /></>}
-            {(mode === "register" || mode === "forgot") && <><label htmlFor="email">E-mail</label><input id="email" name="email" type="email" placeholder="voce@exemplo.com" autoComplete="email" maxLength={254} required /></>}
-            {(mode === "register" || mode === "reset") && <><label htmlFor="password">{mode === "reset" ? "Nova senha" : "Senha"}</label><input id="password" name="password" type="password" placeholder="Mínimo de 12 caracteres" autoComplete={mode === "reset" ? "new-password" : "new-password"} minLength={12} maxLength={128} required /><label htmlFor="confirmPassword">Confirme a senha</label><input id="confirmPassword" name="confirmPassword" type="password" placeholder="Digite a senha novamente" autoComplete="new-password" minLength={12} maxLength={128} required /></>}
-            <button type="submit" className={styles.loginButton} disabled={submitting || (mode === "forgot" && passwordResetEnabled === false)}>{submitting ? "Aguarde…" : mode === "register" ? "Criar conta" : mode === "forgot" ? "Enviar link de recuperação" : "Salvar nova senha"}</button>
+            {mode === "register" && <div className={styles.etapas} aria-label={`Etapa ${etapa + 1} de 3`}>{[0, 1, 2].map((i) => <span key={i} className={i <= etapa ? styles.etapaFeita : undefined} />)}</div>}
+            {mode === "register" && etapa === 0 && <div key="e0" className={styles.etapa}><label htmlFor="name">Nome</label><input id="name" name="name" type="text" placeholder="Seu nome" autoComplete="name" minLength={2} maxLength={120} required autoFocus value={nome} onChange={(e) => setNome(e.target.value)} /></div>}
+            {mode === "register" && etapa === 1 && <div key="e1" className={styles.etapa}><label htmlFor="email">E-mail</label><input id="email" name="email" type="email" placeholder="voce@exemplo.com" autoComplete="email" maxLength={254} required autoFocus value={email} onChange={(e) => setEmail(e.target.value)} /></div>}
+            {mode === "forgot" && <><label htmlFor="email">E-mail</label><input id="email" name="email" type="email" placeholder="voce@exemplo.com" autoComplete="email" maxLength={254} required /></>}
+            {((mode === "register" && etapa === 2) || mode === "reset") && <>{mode === "register" && <input type="email" name="username" value={email} autoComplete="username" readOnly hidden />}<label htmlFor="password">{mode === "reset" ? "Nova senha" : "Senha"}</label><input id="password" name="password" type="password" placeholder="Mínimo de 12 caracteres" autoComplete="new-password" minLength={12} maxLength={128} required autoFocus={mode === "register"} /><label htmlFor="confirmPassword">Confirme a senha</label><input id="confirmPassword" name="confirmPassword" type="password" placeholder="Digite a senha novamente" autoComplete="new-password" minLength={12} maxLength={128} required /></>}
+            <button type="submit" className={styles.loginButton} disabled={submitting || (mode === "forgot" && passwordResetEnabled === false)}>{submitting ? "Aguarde…" : mode === "register" ? (etapa < 2 ? "Continuar" : "Criar conta") : mode === "forgot" ? "Enviar link de recuperação" : "Salvar nova senha"}</button>
             {mode === "forgot" && passwordResetEnabled === false && <p className={styles.message} role="status">A recuperação por e-mail está temporariamente indisponível. Entre em contato com a equipe Orange.</p>}
+            {mode === "register" && etapa > 0 && <button type="button" className={styles.backLink} onClick={() => { setError(""); setEtapa(etapa - 1); }}>Voltar</button>}
             {error && <p className={styles.error} role="alert">{error}</p>}
           </form>
         ) : <p className={styles.message} role="status">{notice}</p>}

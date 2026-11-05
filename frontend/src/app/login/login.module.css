@@ -195,3 +195,12 @@
   .socialButton,
   .siteLink { transition: none; }
 }
+
+/* cadastro em etapas */
+.etapas { display: flex; gap: 6px; margin-bottom: 6px; }
+.etapas span { height: 4px; flex: 1; border-radius: 4px; background: var(--border); transition: background .35s; }
+.etapas .etapaFeita { background: var(--orange); }
+.etapa { display: contents; }
+.etapa > * { animation: etapa-entra .35s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes etapa-entra { from { opacity: 0; transform: translateX(14px); } }
+@media (prefers-reduced-motion: reduce) { .etapa > * { animation: none; } }
