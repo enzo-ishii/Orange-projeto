@@ -338,6 +338,30 @@ export default function Home() {
         <p className="plan-note" data-reveal>* Edição em preparação. Condições e prazos serão enviados primeiro para a lista de espera.</p>
       </section>
 
+      {/* Planos com preços de demonstração e benefícios essenciais. */}
+      <section className="plan-section section-shell" id="planos" ref={planosRef}>
+        <div className="plan-heading">
+          <div className="section-kicker" data-reveal>ESCOLHA SEU ORANGE</div>
+          <h2 data-reveal>Seu próximo gole<br /><span>começa aqui.</span></h2>
+          <p data-reveal>Sem complicação. Escolha o formato que combina com você.</p>
+        </div>
+        <div className="plans-grid">
+          {plans.map((plan, index) => (
+            <article className={`plan-card ${plan.featured ? "featured" : ""}`} key={plan.name} data-reveal data-tilt>
+              {plan.featured && <div className="popular-tag"><Sparkles size={13} aria-hidden="true" /> O MAIS ESCOLHIDO</div>}
+              <div className="plan-topline"><span>{plan.name}</span><span>0{index + 1}</span></div>
+              <p className="plan-description">{plan.description}</p>
+              <div className="plan-price"><span data-count>{plan.amount}</span><small>{plan.detail}</small></div>
+              <div className="plan-divider" />
+              <ul>{plan.perks.map((perk) => <li key={perk}><Check size={15} aria-hidden="true" />{perk}</li>)}</ul>
+              <a className={plan.featured ? "button button-orange plan-button" : "button button-outline plan-button"} href={`mailto:oi@orange.com.br?subject=${encodeURIComponent(`Quero conhecer o plano ${plan.name}`)}`}>
+                Tenho interesse <ArrowRight size={16} aria-hidden="true" />
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
+
       {/* Seção de conceito: explica a proposta da marca em três ideias simples. */}
       <section className="story section-shell" id="conceito">
         <div className="section-kicker" data-reveal>01 / A EXPERIÊNCIA</div>
@@ -398,28 +422,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Planos com preços de demonstração e benefícios essenciais. */}
-      <section className="plan-section section-shell" id="planos" ref={planosRef}>
-        <div className="plan-heading">
-          <div className="section-kicker" data-reveal>03 / ESCOLHA SEU ORANGE</div>
-          <span className="fictional-prices" data-reveal>PREÇOS FICTÍCIOS · ESTUDO DE LAYOUT</span>
-          <h2 data-reveal>Seu próximo gole<br /><span>começa aqui.</span></h2>
-          <p data-reveal>Sem complicação. Escolha o formato que combina com você.</p>
+      {/* Orange por uma causa: a garrafa tem valor de volta (depósito devolvido na devolução) e metas do 1º ano. */}
+      <section className="causa-section section-shell" id="causa">
+        <div className="benefit-heading">
+          <div className="section-kicker" data-reveal>03 / RECICLAGEM ORANGE</div>
+          <h2 data-reveal>Orange por uma causa<br /><span>ambiental e social.</span></h2>
+          <p data-reveal>Toda garrafa Orange tem valor de volta. Na compra entra um pequeno depósito; na devolução, ele volta inteiro pra você. A garrafa é higienizada e volta a circular. Nada vira lixo.</p>
         </div>
-        <div className="plans-grid">
-          {plans.map((plan, index) => (
-            <article className={`plan-card ${plan.featured ? "featured" : ""}`} key={plan.name} data-reveal data-tilt>
-              {plan.featured && <div className="popular-tag"><Sparkles size={13} aria-hidden="true" /> O MAIS ESCOLHIDO</div>}
-              <div className="plan-topline"><span>{plan.name}</span><span>0{index + 1}</span></div>
-              <p className="plan-description">{plan.description}</p>
-              <div className="plan-price"><span data-count>{plan.amount}</span><small>{plan.detail}</small></div>
-              <div className="plan-divider" />
-              <ul>{plan.perks.map((perk) => <li key={perk}><Check size={15} aria-hidden="true" />{perk}</li>)}</ul>
-              <a className={plan.featured ? "button button-orange plan-button" : "button button-outline plan-button"} href={`mailto:oi@orange.com.br?subject=${encodeURIComponent(`Quero conhecer o plano ${plan.name}`)}`}>
-                Tenho interesse <ArrowRight size={16} aria-hidden="true" />
-              </a>
-            </article>
-          ))}
+        <ol className="causa-passos">
+          <li data-reveal><span>01</span><h3>Compre</h3><p>Cada garrafa sai com o selo de devolução e um depósito pequeno embutido no preço.</p></li>
+          <li data-reveal><span>02</span><h3>Devolva</h3><p>Nos pontos de coleta pela cidade ou com o entregador. O NFC reconhece a garrafa na hora.</p></li>
+          <li data-reveal><span>03</span><h3>Receba</h3><p>O depósito volta como cashback e parte de cada devolução vira renda para cooperativas de catadores parceiras.</p></li>
+        </ol>
+        <div className="causa-numeros" data-reveal>
+          <p className="causa-numeros-titulo">Metas para o primeiro ano</p>
+          <dl>
+            <div><dt><span data-count>100.000</span></dt><dd>garrafas de volta ao ciclo</dd></div>
+            <div><dt><span data-count>95</span>%</dt><dd>das garrafas devolvidas</dd></div>
+            <div><dt><span data-count>2,5</span> t</dt><dd>de plástico que não vira lixo</dd></div>
+            <div><dt><span data-count>50</span></dt><dd>pontos de coleta em Brasília</dd></div>
+          </dl>
         </div>
       </section>
 

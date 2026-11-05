@@ -1993,3 +1993,21 @@ button, input, select, textarea { font-family: inherit; }
 .plan-card.featured .popular-tag { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 18px rgba(255, 107, 24, .7); }
 .plan-card.featured .popular-tag svg { color: #fff; }
 @media (max-width: 900px) { .plan-card.featured[data-tilt], .plan-card.featured[data-tilt]:hover { transform: none; } }
+
+/* Orange por uma causa */
+.causa-section { padding: 0 0 100px; }
+.causa-passos { list-style: none; padding: 0; margin: 0 0 64px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; counter-reset: none; }
+.causa-passos li { border-top: 1px solid var(--line); padding-top: 22px; }
+.causa-passos span { font: 12px 'DM Mono', monospace; letter-spacing: 1px; color: var(--orange); }
+.causa-passos h3 { font: 400 24px 'Archivo Black', sans-serif; letter-spacing: -.5px; margin: 10px 0 8px; }
+.causa-passos p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 320px; }
+.causa-numeros { border-radius: 40px; padding: 40px 44px; background: var(--panel); border: 1px solid var(--line); }
+.causa-numeros-titulo { margin: 0 0 26px; font: 12px 'DM Mono', monospace; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); }
+.causa-numeros dl { margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
+.causa-numeros dt { font: 400 clamp(36px, 4.4vw, 60px) 'Archivo Black', sans-serif; letter-spacing: -2px; color: var(--orange); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.causa-numeros dd { margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+@media (max-width: 900px) {
+  .causa-passos { grid-template-columns: 1fr; gap: 26px; margin-bottom: 44px; }
+  .causa-numeros { padding: 30px 24px; border-radius: 30px; }
+  .causa-numeros dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 18px; }
+}
