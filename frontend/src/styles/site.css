@@ -1982,3 +1982,14 @@ button, input, select, textarea { font-family: inherit; }
 .plan-card.featured .plan-divider { background: var(--line); }
 .plan-card.featured .popular-tag { border-color: rgba(255, 107, 24, .6); }
 @media (prefers-reduced-motion: reduce) { .plan-card.featured, .plan-card.featured::before { animation: none; } }
+
+/* Orange+ mais chamativo: maior, anel mais grosso, nome e preço em laranja, brilho mais forte */
+.plan-card.featured { z-index: 2; }
+.plan-card.featured[data-tilt] { transform: perspective(1000px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1.09); }
+.plan-card.featured[data-tilt]:hover { transform: perspective(1000px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1.09) translateY(-4px); }
+.plan-card.featured::before { padding: 3px; filter: drop-shadow(0 0 6px rgba(255, 140, 50, .9)); }
+.plan-card.featured .plan-topline span:first-child, .plan-card.featured .plan-price { color: var(--orange); }
+.plan-card.featured .plan-price { text-shadow: 0 0 24px rgba(255, 107, 24, .45); }
+.plan-card.featured .popular-tag { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 18px rgba(255, 107, 24, .7); }
+.plan-card.featured .popular-tag svg { color: #fff; }
+@media (max-width: 900px) { .plan-card.featured[data-tilt], .plan-card.featured[data-tilt]:hover { transform: none; } }
