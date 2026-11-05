@@ -23,8 +23,8 @@ const LinhaShowcase = dynamic(() => import("@/components/orange/LinhaShowcase"),
 // Os valores são fictícios e servem somente como exemplo visual.
 const plans = [
   { name: "Gominho", amount: "R$ 19,90", detail: "/ mês", description: "Pra começar no ritmo da laranja.", perks: ["2 sucos por mês", "15% de cashback", "Suco 100% natural"], featured: false },
-  { name: "Citrus", amount: "R$ 39,90", detail: "/ mês", description: "Frescor toda semana, sem pensar.", perks: ["Até 7 refis por mês", "15% de cashback nas compras", "Garrafa retornável"], featured: true },
-  { name: "Orange+", amount: "R$ 49,90", detail: "/ mês", description: "O máximo de Orange na sua rotina.", perks: ["Até 11 refis por mês", "15% de cashback nas compras", "Garrafa retornável"], featured: false },
+  { name: "Citrus", amount: "R$ 39,90", detail: "/ mês", description: "Frescor toda semana, sem pensar.", perks: ["Até 7 refis por mês", "15% de cashback nas compras", "Garrafa retornável"], featured: false },
+  { name: "Orange+", amount: "R$ 49,90", detail: "/ mês", description: "O máximo de Orange na sua rotina.", perks: ["Até 11 refis por mês", "15% de cashback nas compras", "Garrafa retornável"], featured: true },
 ];
 
 type StoryCard = {
@@ -415,7 +415,7 @@ export default function Home() {
               <div className="plan-price"><span data-count>{plan.amount}</span><small>{plan.detail}</small></div>
               <div className="plan-divider" />
               <ul>{plan.perks.map((perk) => <li key={perk}><Check size={15} aria-hidden="true" />{perk}</li>)}</ul>
-              <a className={plan.featured ? "button button-dark plan-button" : "button button-outline plan-button"} href={`mailto:oi@orange.com.br?subject=${encodeURIComponent(`Quero conhecer o plano ${plan.name}`)}`}>
+              <a className={plan.featured ? "button button-orange plan-button" : "button button-outline plan-button"} href={`mailto:oi@orange.com.br?subject=${encodeURIComponent(`Quero conhecer o plano ${plan.name}`)}`}>
                 Tenho interesse <ArrowRight size={16} aria-hidden="true" />
               </a>
             </article>
