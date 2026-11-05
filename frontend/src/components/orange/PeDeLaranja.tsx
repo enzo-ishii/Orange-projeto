@@ -1,6 +1,6 @@
 "use client";
 
-// Sequência da seção da causa, uma vez ao entrar na tela: o pé de laranja cresce e floresce, vira uma família,
+// Sequência da seção da causa, ao entrar na tela (duas voltas): o pé de laranja cresce e floresce, vira uma família,
 // aparece o motion da logo Orange e termina de novo na arvorezinha. Com "reduzir movimento", só a árvore pronta.
 import { useEffect, useRef, useState } from "react";
 import LogoAnimada from "@/components/orange/LogoAnimada";
@@ -11,44 +11,41 @@ const FOLHAS: [number, number, number][] = [
 const FRUTOS: [number, number][] = [[112, 150], [186, 132], [150, 104], [208, 178], [92, 182], [160, 170]];
 const FLORES: [number, number][] = [[132, 84], [176, 74], [118, 124], [196, 104], [140, 152], [230, 160], [70, 166]];
 
-type Cena = "espera" | "arvore" | "familia" | "logo" | "fim";
-// quanto cada cena fica na tela (ms) antes da próxima
-const TEMPOS: [Cena, number][] = [["arvore", 5200], ["familia", 3800], ["logo", 3400], ["fim", 0]];
+type Cena = "arvore" | "familia" | "logo" | "fim";
+// a sequência roda duas vezes e para na árvore; cada cena entra antes de a anterior acabar (encaixe)
+const SEQ: Cena[] = ["arvore", "familia", "logo", "arvore", "familia", "logo", "fim"];
+const DURA: Record<Cena, number> = { arvore: 2300, familia: 1700, logo: 2200, fim: 0 }; // ms na tela
 
 export default function PeDeLaranja() {
   const ref = useRef<HTMLDivElement>(null);
-  const [cena, setCena] = useState<Cena>("espera");
-  const [vista, setVista] = useState({ familia: false, logo: false });
+  const [passo, setPasso] = useState(-1); // -1: esperando entrar na tela
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) { setCena("fim"); return; }
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) { setPasso(SEQ.length - 1); return; }
     const timers: number[] = [];
     const io = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return;
       io.disconnect();
       let t = 0;
-      for (const [c, d] of TEMPOS) {
-        timers.push(window.setTimeout(() => {
-          setCena(c);
-          if (c === "familia" || c === "logo") setVista((v) => ({ ...v, [c]: true }));
-        }, t));
-        t += d;
-      }
+      SEQ.forEach((c, i) => { timers.push(window.setTimeout(() => setPasso(i), t)); t += DURA[c]; });
     }, { threshold: 0.45 });
     io.observe(el);
     return () => { io.disconnect(); timers.forEach(clearTimeout); };
   }, []);
 
+  const cena = passo < 0 ? "espera" : SEQ[passo];
   const arvore = cena === "arvore" || cena === "fim" || cena === "espera";
+  // chaves: cada vez que a cena volta, ela remonta e a animação recomeça
+  const kArvore = passo >= 6 ? 2 : passo >= 3 ? 1 : 0, kFamilia = passo >= 4 ? 1 : 0, kLogo = passo >= 5 ? 1 : 0;
   return (
     <div className="pe-laranja" ref={ref} aria-hidden="true">
       <div className={`pe-cena${arvore ? " ativa" : ""}`}>
-        <Arvore key={cena === "fim" ? "fim" : "inicio"} cresce={cena !== "espera"} />
+        <Arvore key={kArvore} cresce={passo >= 0} />
       </div>
-      <div className={`pe-cena${cena === "familia" ? " ativa" : ""}`}>{vista.familia && <Familia />}</div>
-      <div className={`pe-cena pe-cena-logo${cena === "logo" ? " ativa" : ""}`}>{vista.logo && <LogoAnimada altura={170} />}</div>
+      <div className={`pe-cena${cena === "familia" ? " ativa" : ""}`}>{passo >= 1 && <Familia key={kFamilia} />}</div>
+      <div className={`pe-cena pe-cena-logo${cena === "logo" ? " ativa" : ""}`}>{passo >= 2 && <LogoAnimada key={kLogo} altura={170} />}</div>
     </div>
   );
 }
