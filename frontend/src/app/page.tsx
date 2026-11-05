@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Menu, Moon, Sun, X, Sparkles } from "lucide-react";
 import StaggerTestimonials from "@/components/orange/StaggerTestimonials";
 import LogoAnimada from "@/components/orange/LogoAnimada";
+import PeDeLaranja from "@/components/orange/PeDeLaranja";
 import LogoOrange from "@/components/orange/LogoOrange";
 import WebMcpTools from "@/components/webmcp-tools";
 import { useRevelarAoRolar } from "@/lib/use-revelar-ao-rolar";
@@ -424,10 +425,13 @@ export default function Home() {
 
       {/* Orange por uma causa: a garrafa tem valor de volta (depósito devolvido na devolução) e metas do 1º ano. */}
       <section className="causa-section section-shell" id="causa">
+        <div className="causa-topo">
         <div className="benefit-heading">
           <div className="section-kicker" data-reveal>03 / RECICLAGEM ORANGE</div>
           <h2 data-reveal>Orange por uma causa<br /><span>ambiental e social.</span></h2>
           <p data-reveal>Toda garrafa Orange tem valor de volta. Na compra entra um pequeno depósito; na devolução, ele volta inteiro pra você. A garrafa é higienizada e volta a circular. Nada vira lixo.</p>
+        </div>
+        <PeDeLaranja />
         </div>
         <ol className="causa-passos">
           <li data-reveal><span>01</span><h3>Compre</h3><p>Cada garrafa sai com o selo de devolução e um depósito pequeno embutido no preço.</p></li>
