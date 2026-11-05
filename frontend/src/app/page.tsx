@@ -23,8 +23,8 @@ const LinhaShowcase = dynamic(() => import("@/components/orange/LinhaShowcase"),
 // Os valores são fictícios e servem somente como exemplo visual.
 const plans = [
   { name: "Gominho", amount: "R$ 19,90", detail: "/ mês", description: "Pra começar no ritmo da laranja.", perks: ["2 sucos por mês", "15% de cashback", "Suco 100% natural"], featured: false },
-  { name: "Citrus", amount: "R$ 39,90", detail: "/ mês", description: "Frescor toda semana, sem pensar.", perks: ["Até 7 refis por mês", "15% de cashback nas compras", "Garrafa retornável"], featured: false },
   { name: "Orange+", amount: "R$ 49,90", detail: "/ mês", description: "O máximo de Orange na sua rotina.", perks: ["Até 11 refis por mês", "15% de cashback nas compras", "Garrafa retornável"], featured: true },
+  { name: "Citrus", amount: "R$ 39,90", detail: "/ mês", description: "Frescor toda semana, sem pensar.", perks: ["Até 7 refis por mês", "15% de cashback nas compras", "Garrafa retornável"], featured: false },
 ];
 
 type StoryCard = {
