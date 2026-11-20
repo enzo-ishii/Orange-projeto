@@ -53,7 +53,7 @@ Na primeira inicialização, `start:prod` aplica a migração e cria um administ
 
 `MFA_ENCRYPTION_KEY` pode ser uma chave estável de 32 bytes em hexadecimal ou Base64. Se não for definida, a API deriva a chave de `DATABASE_URL`; mantenha a URL estável enquanto houver contas com MFA ativado. As variáveis SMTP são necessárias para o envio efetivo dos links de recuperação.
 
-Para habilitar o Google, crie credenciais OAuth Web e cadastre `https://SEU-DOMINIO/api/auth/oauth/google/callback` como URI de redirecionamento autorizado. Para a Apple, configure um Service ID e cadastre `https://SEU-DOMINIO/api/auth/oauth/apple/callback` como Return URL. Use o domínio do frontend nos dois provedores; os caminhos `/api/*` são encaminhados pela aplicação Next para a API. A Apple recebe a chave `.p8` em `APPLE_PRIVATE_KEY`, com cada quebra de linha escrita como `\n`; a API gera o client secret assinado quando troca o código. Se as credenciais de um provedor estiverem ausentes, o botão correspondente fica oculto.
+Para habilitar o Google, crie credenciais OAuth Web e cadastre `https://SEU-DOMINIO/api/auth/oauth/google/callback` como URI de redirecionamento autorizado. Para a Apple, configure um Service ID e cadastre `https://SEU-DOMINIO/api/auth/oauth/apple/callback` como Return URL. Use o domínio do frontend nos dois provedores; os caminhos `/api/*` são encaminhados pela aplicação Next para a API. A Apple recebe a chave `.p8` em `APPLE_PRIVATE_KEY`, com cada quebra de linha escrita como `\n`; a API gera o client secret assinado quando troca o código. Se as credenciais de um provedor estiverem ausentes, o botão continua visível e avisa que o acesso chega em breve.
 
 ## 2. Publique o frontend
 
@@ -66,6 +66,8 @@ Start: npm run start
 ```
 
 Defina `BACKEND_URL=https://URL-PUBLICA-DA-API` antes do build do frontend. O Next encaminha `/api/*` para a API sob o mesmo domínio do site, mantendo o cookie de sessão no domínio do frontend. Ao publicar por diretório local, envie `frontend/`; ao publicar via Git, configure `frontend` como raiz da aplicação. Depois de publicar ambos, configure `FRONTEND_URL` na API com a origem exata do site e reinicie/republique os serviços conforme necessário.
+
+O frontend também serve a versão web do app em `/app` (arquivos em `frontend/public/app`). Para atualizar depois de mudar o app, rode `npm run web:previa` dentro de `mobile/` e publique o frontend de novo.
 
 ## 3. Acesse o painel
 
