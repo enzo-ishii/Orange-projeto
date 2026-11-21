@@ -25,6 +25,7 @@ O app iOS (SwiftUI, projeto `OrangeApp` no Mac do Enzo) fala com a API NestJS de
 
 | Método | Rota | Uso |
 |---|---|---|
+| POST | `/api/mobile/auth/firebase` | `{ idToken }` do Firebase Phone Auth → `{ token, user }` (**caminho principal**) |
 | POST | `/api/mobile/auth/sms/start` | `{ phone: "+5561987654321" }` envia o código (5/min por IP) |
 | POST | `/api/mobile/auth/sms/verify` | `{ phone, code }` → `{ token, user }` (400 errado, 410 vencido, 429 tentativas) |
 | POST | `/api/mobile/auth/logout` | encerra a sessão |
@@ -43,7 +44,7 @@ Sessão do app: token aleatório de 32 bytes, guardado só como sha256 (`mobile_
 
 | Item | Depende de | Como |
 |---|---|---|
-| SMS de verdade | Conta Twilio (Enzo) | Criar Verify Service, pôr `TWILIO_*` nas variáveis da API na Hostinger |
+| SMS de verdade | Firebase no plano Blaze (Enzo) | Projeto `orange-646fd`; o app envia o SMS pelo Firebase e a API confere o token (`FIREBASE_PROJECT_ID`). Twilio fica como alternativa |
 | Cartão na Wallet | Apple Developer Program US$ 99/ano (Enzo) | Criar Pass Type ID `pass.com.bebaorange.cartao`, gerar certificado, pedir **NFC Certificate** da Wallet à Apple, `npm i passkit-generator`, pôr `WALLET_*` |
 | Leitor NFC na máquina | Hardware compatível com Apple VAS | Leitor certificado (ex.: VTAP100, ACR1252U com SDK VAS) chama `/machines/:id/tap` |
 | Cobrança recorrente | Gateway (Asaas, Mercado Pago, Pagar.me) | Pix Automático + cartão; Apple Pay precisa de Merchant ID |

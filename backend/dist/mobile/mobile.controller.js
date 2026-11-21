@@ -16,7 +16,7 @@ import { PrismaService } from '../database/prisma.service.js';
 import { MachineKeyGuard } from './machine-key.guard.js';
 import { MobileAuthService } from './mobile-auth.service.js';
 import { MobileSessionGuard } from './mobile-session.guard.js';
-import { ConsentsDto, MachineTapDto, SmsStartDto, SmsVerifyDto, UpdateProfileDto } from './mobile.dto.js';
+import { ConsentsDto, FirebaseLoginDto, MachineTapDto, SmsStartDto, SmsVerifyDto, UpdateProfileDto } from './mobile.dto.js';
 import { MobileService } from './mobile.service.js';
 import { WalletPassService } from './wallet-pass.service.js';
 let MobileController = class MobileController {
@@ -35,6 +35,9 @@ let MobileController = class MobileController {
     }
     verify(body) {
         return this.auth.verify(body.phone, body.code);
+    }
+    firebase(body) {
+        return this.auth.verifyFirebase(body.idToken);
     }
     logout(header = '') {
         return this.auth.signOut(header.replace(/^Bearer /, ''));
@@ -94,6 +97,16 @@ __decorate([
     __metadata("design:paramtypes", [SmsVerifyDto]),
     __metadata("design:returntype", void 0)
 ], MobileController.prototype, "verify", null);
+__decorate([
+    Post('auth/firebase'),
+    HttpCode(200),
+    UseGuards(ThrottlerGuard),
+    Throttle({ default: { ttl: 60_000, limit: 10 } }),
+    __param(0, Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [FirebaseLoginDto]),
+    __metadata("design:returntype", void 0)
+], MobileController.prototype, "firebase", null);
 __decorate([
     Post('auth/logout'),
     HttpCode(200),

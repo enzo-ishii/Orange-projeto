@@ -88,4 +88,12 @@ __decorate([
     Max(50),
     __metadata("design:type", Number)
 ], MachineTapDto.prototype, "bottles", void 0);
+export class FirebaseLoginDto {
+    idToken;
+}
+__decorate([
+    IsString(),
+    Length(100, 4096),
+    __metadata("design:type", String)
+], FirebaseLoginDto.prototype, "idToken", void 0);
 //# sourceMappingURL=mobile.dto.js.map

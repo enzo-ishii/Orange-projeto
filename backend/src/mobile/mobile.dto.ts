@@ -59,3 +59,9 @@ export class MachineTapDto {
   @Max(50)
   bottles?: number;
 }
+
+export class FirebaseLoginDto {
+  @IsString()
+  @Length(100, 4096)
+  idToken!: string;
+}

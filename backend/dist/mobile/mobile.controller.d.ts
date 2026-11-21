@@ -2,7 +2,7 @@ import type { Response } from 'express';
 import { PrismaService } from '../database/prisma.service.js';
 import { MobileAuthService } from './mobile-auth.service.js';
 import { MobileRequest } from './mobile-session.guard.js';
-import { ConsentsDto, MachineTapDto, SmsStartDto, SmsVerifyDto, UpdateProfileDto } from './mobile.dto.js';
+import { ConsentsDto, FirebaseLoginDto, MachineTapDto, SmsStartDto, SmsVerifyDto, UpdateProfileDto } from './mobile.dto.js';
 import { MobileService } from './mobile.service.js';
 import { WalletPassService } from './wallet-pass.service.js';
 export declare class MobileController {
@@ -22,6 +22,14 @@ export declare class MobileController {
             phone: string;
         };
     }>;
+    firebase(body: FirebaseLoginDto): Promise<{
+        token: string;
+        user: {
+            id: string;
+            name: string;
+            phone: string;
+        };
+    }>;
     logout(header?: string): Promise<void>;
     me(req: MobileRequest): Promise<{
         id: string;
@@ -31,13 +39,13 @@ export declare class MobileController {
     }>;
     updateMe(req: MobileRequest, body: UpdateProfileDto): import("../generated/prisma/models.js").Prisma__MobileCustomerClient<{
         id: string;
+        phone: string;
         createdAt: Date;
         name: string | null;
-        updatedAt: Date;
-        phone: string;
         cardNfcId: string;
         passSerial: string;
         foundersNumber: number | null;
+        updatedAt: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
         omit: import("../generated/prisma/internal/prismaNamespace.js").GlobalOmitConfig | undefined;
     }>;
@@ -58,8 +66,8 @@ export declare class MobileController {
                 id: string;
                 createdAt: Date;
                 customerId: string;
-                kind: import("../generated/prisma/enums.js").LedgerKind;
                 amountCents: number;
+                kind: import("../generated/prisma/enums.js").LedgerKind;
                 description: string;
                 machineId: string | null;
             }[];
@@ -73,13 +81,13 @@ export declare class MobileController {
             }[];
         } & {
             id: string;
+            phone: string;
             createdAt: Date;
             name: string | null;
-            updatedAt: Date;
-            phone: string;
             cardNfcId: string;
             passSerial: string;
             foundersNumber: number | null;
+            updatedAt: Date;
         }) | null;
     }>;
     deleteMe(req: MobileRequest): Promise<{

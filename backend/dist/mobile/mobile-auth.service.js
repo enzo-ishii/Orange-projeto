@@ -11,6 +11,7 @@ import { GoneException, HttpException, HttpStatus, Injectable, UnauthorizedExcep
 import { createHash, randomBytes, randomInt, timingSafeEqual } from 'node:crypto';
 import { PrismaService } from '../database/prisma.service.js';
 import { SmsProvider } from './sms.provider.js';
+import { verifyFirebasePhoneToken } from './firebase-token.js';
 const CODE_TTL_MS = 5 * 60_000;
 const MAX_ATTEMPTS = 3;
 const RESEND_COOLDOWN_MS = 45_000;
@@ -59,6 +60,19 @@ let MobileAuthService = class MobileAuthService {
             }
             await this.prisma.smsChallenge.deleteMany({ where: { phone } });
         }
+        return this.openSession(phone);
+    }
+    async verifyFirebase(idToken) {
+        let phone;
+        try {
+            ({ phone } = await verifyFirebasePhoneToken(idToken));
+        }
+        catch {
+            throw new UnauthorizedException('Login do Firebase inválido ou vencido.');
+        }
+        return this.openSession(phone);
+    }
+    async openSession(phone) {
         const customer = await this.prisma.mobileCustomer.upsert({
             where: { phone },
             update: {},

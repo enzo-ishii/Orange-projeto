@@ -20,3 +20,6 @@ export declare class MachineTapDto {
     amountCents?: number;
     bottles?: number;
 }
+export declare class FirebaseLoginDto {
+    idToken: string;
+}

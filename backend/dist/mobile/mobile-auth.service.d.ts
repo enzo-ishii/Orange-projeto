@@ -15,6 +15,15 @@ export declare class MobileAuthService {
             phone: string;
         };
     }>;
+    verifyFirebase(idToken: string): Promise<{
+        token: string;
+        user: {
+            id: string;
+            name: string;
+            phone: string;
+        };
+    }>;
+    private openSession;
     customerIdFromToken(token: string): Promise<string>;
     signOut(token: string): Promise<void>;
 }

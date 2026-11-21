@@ -11,13 +11,13 @@ export declare class MobileService {
     }>;
     updateName(customerId: string, name: string): import("../generated/prisma/models.js").Prisma__MobileCustomerClient<{
         id: string;
+        phone: string;
         createdAt: Date;
         name: string | null;
-        updatedAt: Date;
-        phone: string;
         cardNfcId: string;
         passSerial: string;
         foundersNumber: number | null;
+        updatedAt: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, {
         omit: import("../generated/prisma/internal/prismaNamespace.js").GlobalOmitConfig | undefined;
     }>;
@@ -48,8 +48,8 @@ export declare class MobileService {
                 id: string;
                 createdAt: Date;
                 customerId: string;
-                kind: import("../generated/prisma/enums.js").LedgerKind;
                 amountCents: number;
+                kind: import("../generated/prisma/enums.js").LedgerKind;
                 description: string;
                 machineId: string | null;
             }[];
@@ -63,13 +63,13 @@ export declare class MobileService {
             }[];
         } & {
             id: string;
+            phone: string;
             createdAt: Date;
             name: string | null;
-            updatedAt: Date;
-            phone: string;
             cardNfcId: string;
             passSerial: string;
             foundersNumber: number | null;
+            updatedAt: Date;
         }) | null;
     }>;
     deleteAccount(customerId: string): Promise<{

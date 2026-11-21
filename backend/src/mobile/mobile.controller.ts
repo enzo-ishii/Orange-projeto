@@ -5,7 +5,7 @@ import { PrismaService } from '../database/prisma.service.js';
 import { MachineKeyGuard } from './machine-key.guard.js';
 import { MobileAuthService } from './mobile-auth.service.js';
 import { MobileRequest, MobileSessionGuard } from './mobile-session.guard.js';
-import { ConsentsDto, MachineTapDto, SmsStartDto, SmsVerifyDto, UpdateProfileDto } from './mobile.dto.js';
+import { ConsentsDto, FirebaseLoginDto, MachineTapDto, SmsStartDto, SmsVerifyDto, UpdateProfileDto } from './mobile.dto.js';
 import { MobileService } from './mobile.service.js';
 import { WalletPassService } from './wallet-pass.service.js';
 
@@ -34,6 +34,15 @@ export class MobileController {
   @Throttle({ default: { ttl: 60_000, limit: 10 } })
   verify(@Body() body: SmsVerifyDto) {
     return this.auth.verify(body.phone, body.code);
+  }
+
+  /** Login por SMS feito pelo Firebase no app (recomendado). */
+  @Post('auth/firebase')
+  @HttpCode(200)
+  @UseGuards(ThrottlerGuard)
+  @Throttle({ default: { ttl: 60_000, limit: 10 } })
+  firebase(@Body() body: FirebaseLoginDto) {
+    return this.auth.verifyFirebase(body.idToken);
   }
 
   @Post('auth/logout')
