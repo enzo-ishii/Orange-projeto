@@ -11,6 +11,7 @@ import { PrismaModule } from './database/prisma.module.js';
 import { PlansModule } from './plans/plans.module.js';
 import { CustomersModule } from './customers/customers.module.js';
 import { SupportModule } from './support/support.module.js';
+import { MobileModule } from './mobile/mobile.module.js';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -22,6 +23,7 @@ AppModule = __decorate([
             PlansModule,
             CustomersModule,
             SupportModule,
+            MobileModule,
         ],
     })
 ], AppModule);

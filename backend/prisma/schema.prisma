@@ -142,3 +142,104 @@ model Plan {
 
   @@map("plans")
 }
+
+// ───────────────────────── App iOS (mobile) ─────────────────────────
+// Clientes do app entram só com celular + SMS (sem e-mail/senha).
+
+enum MachineStatus {
+  OPEN
+  CLOSED
+  MAINTENANCE
+}
+
+enum LedgerKind {
+  CASHBACK
+  BOTTLE_RETURN
+  SPEND
+  ADJUSTMENT
+}
+
+model MobileCustomer {
+  id             String    @id @default(uuid())
+  phone          String    @unique @db.VarChar(20)   // E.164, ex.: +5561987654321
+  name           String?   @db.VarChar(120)
+  cardNfcId      String    @unique @db.Char(32)      // identificador lido pela máquina (VAS)
+  passSerial     String    @unique @db.Char(32)      // serial do cartão na Wallet
+  foundersNumber Int?      @unique                   // 1..1000 (Founders Edition)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  sessions       MobileSession[]
+  ledger         WalletLedgerEntry[]
+  consents       MobileConsent[]
+
+  @@map("mobile_customers")
+}
+
+model MobileSession {
+  id         String         @id @default(uuid())
+  tokenHash  String         @unique @db.Char(64)
+  customerId String
+  expiresAt  DateTime
+  createdAt  DateTime       @default(now())
+  customer   MobileCustomer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId])
+  @@map("mobile_sessions")
+}
+
+/// Usado só quando o Twilio Verify não está configurado (código gerado aqui).
+model SmsChallenge {
+  id        String   @id @default(uuid())
+  phone     String   @db.VarChar(20)
+  codeHash  String   @db.Char(64)
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([phone, createdAt])
+  @@map("sms_challenges")
+}
+
+model WalletLedgerEntry {
+  id          String         @id @default(uuid())
+  customerId  String
+  kind        LedgerKind
+  amountCents Int                                   // positivo entra, negativo sai
+  description String         @db.VarChar(160)
+  machineId   String?
+  createdAt   DateTime       @default(now())
+  customer    MobileCustomer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId, createdAt])
+  @@map("wallet_ledger")
+}
+
+model MobileConsent {
+  id              String         @id @default(uuid())
+  customerId      String
+  termsVersion    String         @db.VarChar(20)
+  marketing       Boolean        @default(false)
+  personalization Boolean        @default(true)
+  createdAt       DateTime       @default(now())
+  customer        MobileCustomer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId, createdAt])
+  @@map("mobile_consents")
+}
+
+model Machine {
+  id               String        @id @db.VarChar(40)    // ex.: "asa-norte"
+  name             String        @db.VarChar(120)
+  address          String        @db.VarChar(200)
+  latitude         Float
+  longitude        Float
+  status           MachineStatus @default(OPEN)
+  hours            String        @db.VarChar(40)
+  hasJuice         Boolean       @default(true)
+  acceptsReturns   Boolean       @default(true)
+  bottlesAvailable Int           @default(0)
+  apiKeyHash       String        @db.Char(64)            // chave do leitor da máquina (sha256)
+  updatedAt        DateTime      @updatedAt
+
+  @@map("machines")
+}
