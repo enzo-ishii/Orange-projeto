@@ -85,6 +85,7 @@ export class AuthService {
       const user = await this.prisma.user.create({
         data: { email: normalizedEmail, name: name?.trim() || null, passwordHash: await hashPassword(password), role: 'CUSTOMER' },
       });
+      this.boasVindas(user.email, user.name);
       return identity(user);
     } catch (error) {
       if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
@@ -92,6 +93,11 @@ export class AuthService {
       }
       throw error;
     }
+  }
+
+  // e-mail de boas-vindas em segundo plano: uma falha no envio nunca impede o cadastro
+  private boasVindas(email: string, name?: string | null) {
+    void this.mailer.sendWelcome(email, name).catch(() => this.logger.error('Falha ao enviar o e-mail de boas-vindas.'));
   }
 
   async login(email: string, password: string) {
@@ -110,6 +116,7 @@ export class AuthService {
     const email = identityClaims.email?.trim().toLowerCase() ?? '';
     if (!identityClaims.subject) throw new UnauthorizedException('A conta do provedor não retornou uma identidade válida.');
 
+    let contaNova = false;
     try {
       const user = await this.prisma.$transaction(async (tx) => {
         const linked = await tx.oAuthAccount.findUnique({
@@ -134,12 +141,14 @@ export class AuthService {
               role: 'CUSTOMER',
             },
           });
+          contaNova = true;
         }
         await tx.oAuthAccount.create({
           data: { provider, subject: identityClaims.subject, providerEmail: email, userId: customer.id },
         });
         return customer;
       });
+      if (contaNova) this.boasVindas(user.email, user.name);
       return this.finishLogin(user);
     } catch (error) {
       if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
