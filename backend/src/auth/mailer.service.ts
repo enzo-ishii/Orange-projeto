@@ -1,7 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import nodemailer from 'nodemailer';
 
-type Mensagem = { to: string; subject: string; text: string; html: string };
+type Mensagem = { to: string; subject: string; text: string; html: string; attachments?: { filename: string; path: string; cid: string }[] };
+
+// pôster de boas-vindas (backend/assets), anexado dentro do e-mail (cid), sem depender do site estar no ar
+const POSTER = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'assets', 'poster-boas-vindas.jpg');
 
 // escapa o que vem do usuário (nome) antes de entrar no HTML do e-mail
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -72,6 +78,7 @@ export class MailerService {
     const primeiro = name?.trim().split(/\s+/)[0] ?? '';
     const ola = primeiro ? `Olá, ${primeiro}!` : 'Olá!';
     const site = this.siteUrl();
+    const temPoster = existsSync(POSTER);
     await this.enviar({
       to: email,
       subject: 'Bem-vindo à Orange 🍊',
@@ -91,6 +98,7 @@ export class MailerService {
         '',
         'Equipe Orange',
       ].join('\n'),
+      attachments: temPoster ? [{ filename: 'orange-boas-vindas.jpg', path: POSTER, cid: 'poster-orange' }] : undefined,
       html: layout(
         esc(ola),
         p('Sua conta Orange foi criada. A partir de agora você acompanha pedidos, assinatura e cashback num só lugar.') +
@@ -101,7 +109,10 @@ ${[['1', 'Escolha um plano: Gominho, Citrus ou Orange+.'], ['2', 'Receba o suco 
 </table>` +
           botao(`${site}/login`, 'Entrar na minha conta') +
           p('Se não foi você que criou esta conta, responda este e-mail que a gente resolve.') +
-          p('Equipe Orange'),
+          p('Equipe Orange') +
+          (temPoster
+            ? `<a href="${site}" style="display:block;margin-top:24px"><img src="cid:poster-orange" width="456" alt="Orange: seu próximo gole começa aqui. Suco 100% natural, 15% de cashback e garrafa retornável." style="display:block;width:100%;max-width:456px;height:auto;border-radius:16px;border:0"></a>`
+            : ''),
       ),
     });
   }
