@@ -85,6 +85,7 @@ export class AuthService {
       const user = await this.prisma.user.create({
         data: { email: normalizedEmail, name: name?.trim() || null, passwordHash: await hashPassword(password), role: 'CUSTOMER' },
       });
+      this.sendWelcomeInBackground(user.email);
       return identity(user);
     } catch (error) {
       if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
@@ -111,6 +112,7 @@ export class AuthService {
     if (!identityClaims.subject) throw new UnauthorizedException('A conta do provedor não retornou uma identidade válida.');
 
     try {
+      let createdCustomer = false;
       const user = await this.prisma.$transaction(async (tx) => {
         const linked = await tx.oAuthAccount.findUnique({
           where: { provider_subject: { provider, subject: identityClaims.subject } },
@@ -134,12 +136,14 @@ export class AuthService {
               role: 'CUSTOMER',
             },
           });
+          createdCustomer = true;
         }
         await tx.oAuthAccount.create({
           data: { provider, subject: identityClaims.subject, providerEmail: email, userId: customer.id },
         });
         return customer;
       });
+      if (createdCustomer) this.sendWelcomeInBackground(user.email);
       return this.finishLogin(user);
     } catch (error) {
       if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
@@ -152,6 +156,13 @@ export class AuthService {
       }
       throw error;
     }
+  }
+
+  private sendWelcomeInBackground(email: string) {
+    this.mailer.sendWelcome(email).catch((error: unknown) => {
+      const reason = error instanceof Error ? error.message : String(error);
+      this.logger.error(`Falha ao enviar e-mail de boas-vindas: ${reason}`);
+    });
   }
 
   private async finishLogin(user: { id: string; email: string; role: string; name?: string | null; mfaEnabled: boolean }) {
